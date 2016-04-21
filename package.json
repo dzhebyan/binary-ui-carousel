@@ -30,7 +30,8 @@
   "main": "lib/index.js",
   "dependencies": {
     "autobind-decorator": "^1.3.3",
-    "react": "^15.0.1"
+    "react": "^15.0.1",
+	"react-scrolling": "git+https://github.com/opensource-cards/react-scrolling.git"
   },
   "devDependencies": {
     "babel": "^6.3.26",
