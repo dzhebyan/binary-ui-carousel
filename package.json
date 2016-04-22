@@ -31,12 +31,12 @@
   "dependencies": {
     "autobind-decorator": "^1.3.3",
     "react": "^15.0.1",
-	"react-scrolling": "git+https://github.com/opensource-cards/react-scrolling.git"
+    "react-scrolling": "git+https://github.com/opensource-cards/react-scrolling.git"
   },
   "devDependencies": {
     "babel": "^6.3.26",
-    "babel-cli": "^6.7.5",
-    "babel-core": "^6.7.6",
+    "babel-cli": "^6.7.7",
+    "babel-core": "^6.7.7",
     "babel-eslint": "^6.0.2",
     "babel-loader": "^6.2.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -44,8 +44,10 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "eslint": "^2.7.0",
-    "eslint-config-airbnb": "^6.2.0",
-    "eslint-plugin-react": "^4.3.0",
+    "eslint-config-airbnb": "^8.0.0",
+    "eslint-plugin-import": "^1.5.0",
+    "eslint-plugin-jsx-a11y": "^1.0.2",
+    "eslint-plugin-react": "^5.0.1",
     "rimraf": "^2.3.4",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
