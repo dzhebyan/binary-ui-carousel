@@ -11,7 +11,8 @@ const propTypes = {
 	size: React.PropTypes.shape({
 		page: React.PropTypes.number,
 		margin: React.PropTypes.number,
-		container: React.PropTypes.number,
+		containerWidth: React.PropTypes.number,
+		containerHeight: React.PropTypes.number,
 	}).isRequired,
 	children: React.PropTypes.arrayOf(
 		React.PropTypes.node
@@ -36,7 +37,8 @@ export class ReactMgr extends React.Component {
 	}
 
 	getCoordinatesByOrientation(position) {
-		return (this.props.orientation === Orientation.Horizontal)
+		const { orientation } = this.props;
+		return (orientation === Orientation.Horizontal)
 			? {
 				x: position,
 				y: 0,
@@ -46,22 +48,43 @@ export class ReactMgr extends React.Component {
 			};
 	}
 
+	getContainerScrollableSize() {
+		const { size, orientation } = this.props;
+		return (orientation === Orientation.Horizontal)
+			? size.containerWidth
+			: size.containerHeight;
+	}
+
+	getPageSize() {
+		const { size, orientation } = this.props;
+		return (orientation === Orientation.Horizontal)
+			? {
+				width: `${size.page}px`,
+				height: '100%',
+			} : {
+				width: '100%',
+				height: `${size.page}px`,
+			};
+	}
+
 	render() {
 		const { size, children } = this.props;
+		const containerScrollableSize = this.getContainerScrollableSize();
 		const scrollerSize = {
-			container: size.container,
+			container: containerScrollableSize,
 			content: children.length * (size.page + size.margin),
 		};
-		const page = {
+		const scrollerPage = {
 			size: size.page,
 			margin: size.margin,
 		};
 		const carouselStyle = {
 			position: 'relative',
-			width: size.container,
-			height: size.container,
+			width: size.containerWidth,
+			height: size.containerHeight,
 			overflow: 'hidden',
 		};
+		const pageSize = this.getPageSize();
 		return (
 			<div style={ carouselStyle } >
 				<Scroller
@@ -69,7 +92,7 @@ export class ReactMgr extends React.Component {
 					orientation={ this.props.orientation }
 					size={ scrollerSize }
 					pagination={ Pagination.Single }
-					page={ page }
+					page={ scrollerPage }
 					loop
 				>
 					{ (scrollerPosition) => children.map((child, i) => {
@@ -79,10 +102,10 @@ export class ReactMgr extends React.Component {
 							children.length
 						);
 						const coordinates = this.getCoordinatesByOrientation(position);
-						const carouselPageStyle = {
+						const carouselPageStyle = Object.assign({}, pageSize, {
 							position: 'absolute',
 							transform: `translate3d(${coordinates.x}px, ${coordinates.y}px, 0px)`,
-						};
+						});
 						return (
 							<div key={ i } style={ carouselPageStyle } >
 								{ child }

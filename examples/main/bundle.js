@@ -58,26 +58,55 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var carouselSize = {
-		page: 200,
-		margin: 10,
-		container: 300
-	};
 	var colors = ['red', 'green', 'blue', 'yellow'];
+	var carouselSizeV = {
+		page: 240,
+		margin: 10,
+		containerWidth: 300,
+		containerHeight: 300
+	};
+	var carouselSizeH = {
+		page: 240,
+		margin: 10,
+		containerWidth: 300,
+		containerHeight: 200
+	};
 
 	ReactDOM.render(React.createElement(
 		_reactMgr.ReactMgr,
-		{ id: 'colors', size: carouselSize },
-		colors.map(function (color) {
-			return React.createElement('div', { key: color,
-				style: {
-					width: carouselSize.page,
-					height: carouselSize.page,
-					backgroundColor: color
-				}
-			});
+		{ id: 'colors', size: carouselSizeV, orientation: _reactMgr.Orientation.Vertiacal },
+		colors.map(function (color, index) {
+			return React.createElement(
+				'div',
+				{ key: color,
+					style: {
+						width: '100%',
+						height: '100%',
+						backgroundColor: color
+					}
+				},
+				index
+			);
 		})
-	), document.getElementById('ReactMgr'));
+	), document.getElementById('ReactMgrV'));
+
+	ReactDOM.render(React.createElement(
+		_reactMgr.ReactMgr,
+		{ id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal },
+		colors.map(function (color, index) {
+			return React.createElement(
+				'div',
+				{ key: color,
+					style: {
+						width: '100%',
+						height: '100%',
+						backgroundColor: color
+					}
+				},
+				index
+			);
+		})
+	), document.getElementById('ReactMgrH'));
 
 /***/ },
 /* 1 */
@@ -20043,11 +20072,14 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.ReactMgr = undefined;
+	exports.Orientation = exports.ReactMgr = undefined;
 
 	var _ReactMgr = __webpack_require__(167);
 
+	var _reactScrolling = __webpack_require__(168);
+
 	exports.ReactMgr = _ReactMgr.ReactMgr;
+	exports.Orientation = _reactScrolling.Orientation;
 
 /***/ },
 /* 167 */
@@ -20086,7 +20118,8 @@
 		size: React.PropTypes.shape({
 			page: React.PropTypes.number,
 			margin: React.PropTypes.number,
-			container: React.PropTypes.number
+			containerWidth: React.PropTypes.number,
+			containerHeight: React.PropTypes.number
 		}).isRequired,
 		children: React.PropTypes.arrayOf(React.PropTypes.node)
 	};
@@ -20123,7 +20156,9 @@
 		}, {
 			key: 'getCoordinatesByOrientation',
 			value: function getCoordinatesByOrientation(position) {
-				return this.props.orientation === _reactScrolling.Orientation.Horizontal ? {
+				var orientation = this.props.orientation;
+
+				return orientation === _reactScrolling.Orientation.Horizontal ? {
 					x: position,
 					y: 0
 				} : {
@@ -20132,28 +20167,54 @@
 				};
 			}
 		}, {
+			key: 'getContainerScrollableSize',
+			value: function getContainerScrollableSize() {
+				var _props = this.props;
+				var size = _props.size;
+				var orientation = _props.orientation;
+
+				return orientation === _reactScrolling.Orientation.Horizontal ? size.containerWidth : size.containerHeight;
+			}
+		}, {
+			key: 'getPageSize',
+			value: function getPageSize() {
+				var _props2 = this.props;
+				var size = _props2.size;
+				var orientation = _props2.orientation;
+
+				return orientation === _reactScrolling.Orientation.Horizontal ? {
+					width: size.page + 'px',
+					height: '100%'
+				} : {
+					width: '100%',
+					height: size.page + 'px'
+				};
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
 
-				var _props = this.props;
-				var size = _props.size;
-				var children = _props.children;
+				var _props3 = this.props;
+				var size = _props3.size;
+				var children = _props3.children;
 
+				var containerScrollableSize = this.getContainerScrollableSize();
 				var scrollerSize = {
-					container: size.container,
+					container: containerScrollableSize,
 					content: children.length * (size.page + size.margin)
 				};
-				var page = {
+				var scrollerPage = {
 					size: size.page,
 					margin: size.margin
 				};
 				var carouselStyle = {
 					position: 'relative',
-					width: size.container,
-					height: size.container,
+					width: size.containerWidth,
+					height: size.containerHeight,
 					overflow: 'hidden'
 				};
+				var pageSize = this.getPageSize();
 				return React.createElement(
 					'div',
 					{ style: carouselStyle },
@@ -20164,18 +20225,17 @@
 							orientation: this.props.orientation,
 							size: scrollerSize,
 							pagination: _reactScrolling.Pagination.Single,
-							page: page,
+							page: scrollerPage,
 							loop: true
 						},
 						function (scrollerPosition) {
 							return children.map(function (child, i) {
 								var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
 								var coordinates = _this2.getCoordinatesByOrientation(position);
-								var carouselPageStyle = {
+								var carouselPageStyle = Object.assign({}, pageSize, {
 									position: 'absolute',
-									width: '100%',
 									transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
-								};
+								});
 								return React.createElement(
 									'div',
 									{ key: i, style: carouselPageStyle },
