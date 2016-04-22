@@ -9,7 +9,7 @@ module.exports = {
 	resolve: {
 		extensions: ['', '.js'],
 		alias: {
-			'react-mgr': path.join(__dirname, '..', '..', 'lib')
+			'react-mgr': path.join(__dirname, '..', '..', 'src')
 		}
 	},
 	module: {

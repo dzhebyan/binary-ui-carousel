@@ -1,79 +1,11 @@
 import * as React from 'react';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
-export class ReactMgr extends React.Component {
-
-	itemPosition(scrollerPosition, item) {
-		return item * (this.props.size.page + this.props.size.margin)
-			+ this.props.size.margin + scrollerPosition;
-	}
-
-	carouselItemPosition(scrollerPosition, item, count) {
-		let pos = this.itemPosition(scrollerPosition, item);
-		if (pos < -this.props.size.page) {
-			pos = this.itemPosition(scrollerPosition, count + item);
-		}
-		return pos;
-	}
-
-	render() {
-		const size = {
-			container: this.props.size.container,
-			content: this.props.children.length * (this.props.size.page + this.props.size.margin),
-		};
-		const page = {
-			size: this.props.size.page,
-			margin: this.props.size.margin,
-		};
-
-		return (
-			<div style={{
-				position: 'relative',
-				width: this.props.size.container,
-				height: this.props.size.container,
-				overflow: 'hidden',
-			}}
-			>
-				<Scroller id="carousel"
-					orientation={ this.props.orientation }
-					size={ size }
-					pagination={ Pagination.Single }
-					page={ page }
-					loop
-				>
-					{(scrollerPosition) => this.props.children.map((child, i) => {
-						const coordinates = { x: 0, y: 0 };
-						const position = this.carouselItemPosition(
-							scrollerPosition,
-							i,
-							this.props.children.length
-						);
-						if (this.props.orientation === Orientation.Horizontal) {
-							coordinates.x = position;
-						} else {
-							coordinates.y = position;
-						}
-						return (
-							<div key={i} style={{
-								position: 'absolute',
-								transform: `translate3d(${coordinates.x}px, ${coordinates.y}px, 0px)`,
-							}}
-							>
-								{child}
-							</div>
-						);
-					})}
-				</Scroller>
-			</div>
-		);
-	}
-}
-
-ReactMgr.defaultProps = {
+const defaultProps = {
 	orientation: Orientation.Horizontal,
 };
 
-ReactMgr.propTypes = {
+const propTypes = {
 	id: React.PropTypes.string.isRequired,
 	orientation: Scroller.enumType(Orientation),
 	size: React.PropTypes.shape({
@@ -85,3 +17,83 @@ ReactMgr.propTypes = {
 		React.PropTypes.node
 	),
 };
+
+export class ReactMgr extends React.Component {
+
+	getItemPosition(scrollerPosition, item) {
+		const { size } = this.props;
+		const { page, margin } = size;
+		return item * (page + margin) + margin + scrollerPosition;
+	}
+
+	getCarouselItemPosition(scrollerPosition, item, count) {
+		const { size } = this.props;
+		let pos = this.getItemPosition(scrollerPosition, item);
+		if (pos < -size.page) {
+			pos = this.getItemPosition(scrollerPosition, count + item);
+		}
+		return pos;
+	}
+
+	getCoordinatesByOrientation(position) {
+		return (this.props.orientation === Orientation.Horizontal)
+			? {
+				x: position,
+				y: 0,
+			} : {
+				x: 0,
+				y: position,
+			};
+	}
+
+	render() {
+		const { size, children } = this.props;
+		const scrollerSize = {
+			container: size.container,
+			content: children.length * (size.page + size.margin),
+		};
+		const page = {
+			size: size.page,
+			margin: size.margin,
+		};
+		const carouselStyle = {
+			position: 'relative',
+			width: size.container,
+			height: size.container,
+			overflow: 'hidden',
+		};
+		return (
+			<div style={ carouselStyle } >
+				<Scroller
+					id="carousel"
+					orientation={ this.props.orientation }
+					size={ scrollerSize }
+					pagination={ Pagination.Single }
+					page={ page }
+					loop
+				>
+					{ (scrollerPosition) => children.map((child, i) => {
+						const position = this.getCarouselItemPosition(
+							scrollerPosition,
+							i,
+							children.length
+						);
+						const coordinates = this.getCoordinatesByOrientation(position);
+						const carouselPageStyle = {
+							position: 'absolute',
+							transform: `translate3d(${coordinates.x}px, ${coordinates.y}px, 0px)`,
+						};
+						return (
+							<div key={ i } style={ carouselPageStyle } >
+								{ child }
+							</div>
+						);
+					}) }
+				</Scroller>
+			</div>
+		);
+	}
+}
+
+ReactMgr.defaultProps = defaultProps;
+ReactMgr.propTypes = propTypes;
