@@ -69,6 +69,10 @@ export class ReactMgr extends React.Component {
 
   render() {
     const { size, children } = this.props;
+    if (children.length === 2) {
+      children.push(children[0]);
+      children.push(children[1]);
+    }
     const containerScrollableSize = this.getContainerScrollableSize();
     const scrollerSize = {
       container: containerScrollableSize,
@@ -85,6 +89,7 @@ export class ReactMgr extends React.Component {
       overflow: 'hidden',
     };
     const pageSize = this.getPageSize();
+    const isLoop = children.length > 1;
     return (
       <div style={carouselStyle} >
         <Scroller
@@ -93,7 +98,8 @@ export class ReactMgr extends React.Component {
           size={scrollerSize}
           pagination={Pagination.Single}
           page={scrollerPage}
-          loop
+          loop={isLoop}
+          center
         >
           {(scrollerPosition) => children.map((child, i) => {
             const position = this.getCarouselItemPosition(
