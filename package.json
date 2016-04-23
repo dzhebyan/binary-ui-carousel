@@ -1,6 +1,6 @@
 {
   "name": "react-mgr",
-  "version": "0.0.1-rc4",
+  "version": "0.0.1-rc5",
   "description": "React carousel component.",
   "keywords": [
     "react",
@@ -31,7 +31,7 @@
   "dependencies": {
     "autobind-decorator": "^1.3.3",
     "react": "^15.0.1",
-    "react-scrolling": "git+https://github.com/opensource-cards/react-scrolling.git"
+    "react-scrolling": "^0.0.1-rc.2"
   },
   "devDependencies": {
     "babel": "^6.3.26",

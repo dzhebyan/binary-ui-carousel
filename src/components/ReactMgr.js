@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
 const defaultProps = {
