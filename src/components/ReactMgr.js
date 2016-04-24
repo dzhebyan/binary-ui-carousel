@@ -90,6 +90,9 @@ export class ReactMgr extends React.Component {
     };
     const pageSize = this.getPageSize();
     const isLoop = children.length > 1;
+    if (!isLoop) {
+      scrollerSize.content += size.margin;
+    }
     return (
       <div style={carouselStyle} >
         <Scroller

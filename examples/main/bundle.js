@@ -20308,6 +20308,9 @@
 	      };
 	      var pageSize = this.getPageSize();
 	      var isLoop = children.length > 1;
+	      if (!isLoop) {
+	        scrollerSize.content += size.margin;
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { style: carouselStyle },
