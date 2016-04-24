@@ -26,38 +26,65 @@ function getStyle(color) {
   };
 }
 
-ReactDOM.render(
-  <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
-    { colors1.map((color, index) => (
-      <div key={color} style={getStyle(color)}>{ index }</div>
-    )) }
-  </ReactMgr>,
-  document.getElementById('ReactMgrH1')
-);
+class Example extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      test: 0,
+    };
+
+    this.onChangeState = this.onChangeState.bind(this);
+  }
+
+  onChangeState() {
+    this.setState({
+      test: this.state.test + 1,
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <div onClick={this.onChangeState} >Change State</div>
+        <div id="ReactMgrH1">
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+            { colors1.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{ index }</div>
+            )) }
+          </ReactMgr>
+        </div>
+        <br />
+        <div id="ReactMgrH2">
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+            { colors2.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{ index }</div>
+            )) }
+          </ReactMgr>
+        </div>
+        <br />
+        <div id="ReactMgrH3">
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+            { colors.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{ index }</div>
+            )) }
+          </ReactMgr>
+        </div>
+        <br />
+        <div id="ReactMgrV">
+          <ReactMgr id="colors" size={ carouselSizeV } orientation={ Orientation.Vertiacal } >
+            { colors.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{ index }</div>
+            )) }
+          </ReactMgr>
+        </div>
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(
-  <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
-    { colors2.map((color, index) => (
-      <div key={color} style={getStyle(color)}>{ index }</div>
-    )) }
-  </ReactMgr>,
-  document.getElementById('ReactMgrH2')
-);
-
-ReactDOM.render(
-  <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
-    { colors.map((color, index) => (
-      <div key={color} style={getStyle(color)}>{ index }</div>
-    )) }
-  </ReactMgr>,
-  document.getElementById('ReactMgrH3')
-);
-
-ReactDOM.render(
-  <ReactMgr id="colors" size={ carouselSizeV } orientation={ Orientation.Vertiacal } >
-    { colors.map((color, index) => (
-      <div key={color} style={getStyle(color)}>{ index }</div>
-    )) }
-  </ReactMgr>,
-  document.getElementById('ReactMgrV')
+  <Example />,
+  document.getElementById('ReactMgr')
 );
