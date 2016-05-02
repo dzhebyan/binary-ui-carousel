@@ -6,6 +6,14 @@
 
 React carousel component.
 
+### Installation
+
+Using [npm](https://www.npmjs.com/):
+
+```
+npm install --save react-mgr
+```
+
 ### License
 
 MIT
