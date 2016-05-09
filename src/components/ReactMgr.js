@@ -104,25 +104,23 @@ export class ReactMgr extends React.Component {
           loop={isLoop}
           center
         >
-          <div>
-            {(scrollerPosition) => children.map((child, i) => {
-              const position = this.getCarouselItemPosition(
-                scrollerPosition,
-                i,
-                children.length
-              );
-              const coordinates = this.getCoordinatesByOrientation(position);
-              const carouselPageStyle = Object.assign({}, pageSize, {
-                position: 'absolute',
-                transform: `translate3d(${coordinates.x}px, ${coordinates.y}px, 0px)`,
-              });
-              return (
-                <div key={i} style={carouselPageStyle} >
-                  {child}
-                </div>
-              );
-            })}
-          </div>
+          {(scrollerPosition) => children.map((child, i) => {
+            const position = this.getCarouselItemPosition(
+              scrollerPosition,
+              i,
+              children.length
+            );
+            const coordinates = this.getCoordinatesByOrientation(position);
+            const carouselPageStyle = Object.assign({}, pageSize, {
+              position: 'absolute',
+              transform: `translate3d(${coordinates.x}px, ${coordinates.y}px, 0px)`,
+            });
+            return (
+              <div key={i} style={carouselPageStyle} >
+                {child}
+              </div>
+            );
+          })}
         </Scroller>
       </div>
     );

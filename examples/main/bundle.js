@@ -20414,25 +20414,21 @@
 	            loop: isLoop,
 	            center: true
 	          },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            function (scrollerPosition) {
-	              return children.map(function (child, i) {
-	                var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
-	                var coordinates = _this2.getCoordinatesByOrientation(position);
-	                var carouselPageStyle = Object.assign({}, pageSize, {
-	                  position: 'absolute',
-	                  transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
-	                });
-	                return _react2.default.createElement(
-	                  'div',
-	                  { key: i, style: carouselPageStyle },
-	                  child
-	                );
+	          function (scrollerPosition) {
+	            return children.map(function (child, i) {
+	              var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
+	              var coordinates = _this2.getCoordinatesByOrientation(position);
+	              var carouselPageStyle = Object.assign({}, pageSize, {
+	                position: 'absolute',
+	                transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
 	              });
-	            }
-	          )
+	              return _react2.default.createElement(
+	                'div',
+	                { key: i, style: carouselPageStyle },
+	                child
+	              );
+	            });
+	          }
 	        )
 	      );
 	    }
@@ -21017,6 +21013,18 @@
 	      return this.props.children(style);
 	    }
 	  }, {
+	    key: 'renderWrappedIfArray',
+	    value: function renderWrappedIfArray(children) {
+	      if (children instanceof Array) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          children
+	        );
+	      }
+	      return children;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this4 = this;
@@ -21040,7 +21048,7 @@
 	              onSwipeUp: _this4.onSwipe,
 	              onSwipeDown: _this4.onSwipe
 	            },
-	            children
+	            _this4.renderWrappedIfArray(children)
 	          );
 	        }
 	      );
