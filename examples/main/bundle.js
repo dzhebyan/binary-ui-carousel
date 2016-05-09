@@ -20291,7 +20291,7 @@
 
 	var propTypes = {
 	  id: _react2.default.PropTypes.string.isRequired,
-	  orientation: _reactScrolling.Scroller.enumType(_reactScrolling.Orientation),
+	  orientation: _react2.default.PropTypes.any, // TODO: fix to Scroller.enumType(Orientation)
 	  size: _react2.default.PropTypes.shape({
 	    page: _react2.default.PropTypes.number,
 	    margin: _react2.default.PropTypes.number,
@@ -20414,21 +20414,25 @@
 	            loop: isLoop,
 	            center: true
 	          },
-	          function (scrollerPosition) {
-	            return children.map(function (child, i) {
-	              var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
-	              var coordinates = _this2.getCoordinatesByOrientation(position);
-	              var carouselPageStyle = Object.assign({}, pageSize, {
-	                position: 'absolute',
-	                transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            function (scrollerPosition) {
+	              return children.map(function (child, i) {
+	                var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
+	                var coordinates = _this2.getCoordinatesByOrientation(position);
+	                var carouselPageStyle = Object.assign({}, pageSize, {
+	                  position: 'absolute',
+	                  transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
+	                });
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: i, style: carouselPageStyle },
+	                  child
+	                );
 	              });
-	              return _react2.default.createElement(
-	                'div',
-	                { key: i, style: carouselPageStyle },
-	                child
-	              );
-	            });
-	          }
+	            }
+	          )
 	        )
 	      );
 	    }
@@ -20985,7 +20989,7 @@
 	      if (typeof this.props.id === 'string') {
 	        var pos = style[this.props.id];
 	        if (this.props.loop) {
-	          pos = this.correctLoopPosition(pos, this.props.size.content, this.contentAutoSize);
+	          pos = (0, _logic.correctLoopPosition)(pos, this.props.size.content, this.contentAutoSize);
 	        }
 	        this.callOnScroll(pos);
 	        if (typeof this.props.children === 'function') {
