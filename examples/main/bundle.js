@@ -20641,21 +20641,26 @@
 	      }
 	      var signedVelocity = this.getSignedVelocity(e);
 	      var scrollerId = this.getLockedScroller();
-	      var newPosition = (0, _StateHelpers.getScrollerPosition)(this.state, scrollerId);
+	      var oldPosition = (0, _StateHelpers.getScrollerPosition)(this.state, scrollerId);
+	      var newPosition = oldPosition;
 	      var pagination = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, this.props.id, this.props.pagination);
 	      if (pagination === Pagination.Single) {
-	        newPosition = (0, _PositionCorrectors.paginationCorrection)(newPosition, scrollerId, this.props, Math.sign(signedVelocity), this.getLockedPage());
+	        newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, this.props, Math.sign(signedVelocity), this.getLockedPage());
 	      } else {
-	        newPosition = (0, _PositionCorrectors.velocityPositionCorrection)(newPosition, scrollerId, signedVelocity);
+	        oldPosition = (0, _PositionCorrectors.velocityPositionCorrection)(oldPosition, scrollerId, signedVelocity);
+	        newPosition = oldPosition;
 	        if (pagination === Pagination.Multiple || pagination === Pagination.First) {
-	          newPosition = (0, _PositionCorrectors.paginationCorrection)(newPosition, scrollerId, this.props, 0, undefined, // prevSinglePage
+	          newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, this.props, 0, undefined, // prevSinglePage
 	          pagination === Pagination.First);
 	        }
 	      }
-	      var finalPosition = this.getFinalPosition(newPosition);
+	      newPosition = this.getFinalPosition(newPosition);
 	      var paginationSpring = (0, _effects.getSpringByPagination)(pagination);
-	      var adjustedSpring = (0, _effects.getAdjustedSpring)(paginationSpring);
-	      this.moveScroller(finalPosition, scrollerId, adjustedSpring);
+	      var adjustedSpring = (0, _effects.getAdjustedSpring)(oldPosition, newPosition, paginationSpring);
+	      if ((0, _StateHelpers.getScrollerPosition)(this.state, scrollerId) !== newPosition) {
+	        this.moveScroller(newPosition, scrollerId, adjustedSpring);
+	        this.autoScrolling = true;
+	      }
 	      this.setLockerEmpty(orientation);
 	    }
 	  }, {
@@ -20777,9 +20782,14 @@
 	      (0, _ScrollerLocks.setScrollerLock)(orientation, scroller);
 	    }
 	  }, {
+	    key: 'getLastRenderedStyle',
+	    value: function getLastRenderedStyle(scrollerId) {
+	      return this.lastRenderedStyle[scrollerId];
+	    }
+	  }, {
 	    key: 'getLastRenderedStyleForLocked',
 	    value: function getLastRenderedStyleForLocked() {
-	      return this.lastRenderedStyle[this.getLock()];
+	      return this.lastRenderedStyle[this.getLock().scroller];
 	    }
 	  }, {
 	    key: 'setLastRenderedStyle',
@@ -20833,7 +20843,7 @@
 	  }, {
 	    key: 'isScrolling',
 	    value: function isScrolling() {
-	      return this.getLock() !== undefined && this.getLockedSwiped();
+	      return this.getLock() !== undefined && this.getLockedSwiped() || this.autoScrolling;
 	    }
 	  }, {
 	    key: 'releaseScroller',
@@ -20863,17 +20873,20 @@
 	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
 
 	      var state = this.state;
+	      var moved = false;
 	      (0, _StateHelpers.foreachScroller)(state, function (scrollerId) {
 	        var oldPosition = (0, _StateHelpers.getScrollerPosition)(state, scrollerId);
 	        var newPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(oldPosition, scrollerId, props, _this2.contentAutoSize);
 	        var newSpringValue = springValue;
-	        if (_this2.lastRenderedStyle && newPosition !== _this2.lastRenderedStyle[scrollerId]) {
-	          newSpringValue = (0, _StateHelpers.getScrollerSpring)(state, scrollerId);
+	        if (_this2.lastRenderedStyle && newPosition !== _this2.getLastRenderedStyle(scrollerId) && (0, _StateHelpers.getScrollerSpring)(state, scrollerId) === null) {
+	          newSpringValue = null;
 	        }
 	        if (newPosition !== oldPosition) {
 	          _this2.moveScroller(newPosition, scrollerId, newSpringValue);
+	          moved = true;
 	        }
 	      });
+	      return moved;
 	    }
 	  }, {
 	    key: 'correctPagination',
@@ -20884,6 +20897,7 @@
 	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
 
 	      var state = this.state;
+	      var moved = false;
 	      (0, _StateHelpers.foreachScroller)(state, function (scrollerId) {
 	        if ((0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.pagination) !== Pagination.None) {
 	          var oldPosition = (0, _StateHelpers.getScrollerPosition)(state, scrollerId);
@@ -20893,10 +20907,12 @@
 	            props.pagination === Pagination.First);
 	            if (newPosition !== oldPosition) {
 	              _this3.moveScroller(newPosition, scrollerId, springValue);
+	              moved = true;
 	            }
 	          }
 	        }
 	      });
+	      return moved;
 	    }
 	  }, {
 	    key: 'correctPosition',
@@ -20925,8 +20941,8 @@
 
 	      var scroller = _getLock2.scroller;
 
-	      if (this.lastRenderedStyle[scroller] !== (0, _StateHelpers.getScrollerPosition)(this.state, scroller)) {
-	        this.moveScroller(this.lastRenderedStyle[scroller], scroller, null);
+	      if (this.getLastRenderedStyleForLocked() !== (0, _StateHelpers.getScrollerPosition)(this.state, scroller)) {
+	        this.moveScroller(this.getLastRenderedStyleForLocked(), scroller, null);
 	        this.setLockedSwiped(true);
 	      }
 	    }
@@ -20978,6 +20994,11 @@
 	      if (onScroll) {
 	        onScroll(scrollerPosition);
 	      }
+	    }
+	  }, {
+	    key: 'motionRest',
+	    value: function motionRest() {
+	      this.autoScrolling = false;
 	    }
 	  }, {
 	    key: 'renderChildren',
@@ -21032,7 +21053,7 @@
 	      var springStyle = (0, _StateHelpers.getSpringStyle)(this.state);
 	      return _react2.default.createElement(
 	        _reactMotion.Motion,
-	        { style: springStyle },
+	        { style: springStyle, onRest: this.motionRest },
 	        function (style) {
 	          _this4.setLastRenderedStyle(style);
 	          var children = _this4.renderChildren(style);
@@ -21056,7 +21077,7 @@
 	  }]);
 
 	  return Scroller;
-	}(_react2.default.Component), (_applyDecoratedDescriptor(_class.prototype, 'onEventBegin', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventBegin'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onEventEnd', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventEnd'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSwipe', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSwipe'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSetContentDom', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSetContentDom'), _class.prototype)), _class);
+	}(_react2.default.Component), (_applyDecoratedDescriptor(_class.prototype, 'onEventBegin', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventBegin'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onEventEnd', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventEnd'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSwipe', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSwipe'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSetContentDom', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSetContentDom'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'motionRest', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'motionRest'), _class.prototype)), _class);
 
 
 	var valueOrArray = function valueOrArray(ReactType) {
@@ -23688,8 +23709,8 @@
 	function getSpringByPagination(pagination) {
 	  switch (pagination) {
 	    case Pagination.Single:
-	      return Springs.Move;
 	    case Pagination.First:
+	      return Springs.Move;
 	    case Pagination.Multiple:
 	      return Springs.Bounce;
 	    default:
@@ -23697,8 +23718,8 @@
 	  }
 	}
 
-	function getAdjustedSpring(newPosition, finalPosition, spring) {
-	  if (newPosition !== finalPosition) {
+	function getAdjustedSpring(oldPosition, newPosition, spring) {
+	  if (oldPosition !== newPosition) {
 	    return Springs.Bounce;
 	  }
 	  return spring;
