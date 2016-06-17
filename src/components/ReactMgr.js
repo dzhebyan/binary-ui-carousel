@@ -67,6 +67,13 @@ export class ReactMgr extends React.Component {
       };
   }
 
+  isVisible(position) {
+    const begin = position;
+    const end = position + this.props.size.page;
+    const size = this.getContainerScrollableSize();
+    return (begin > 0 && begin < size) || (end > 0 && end < size);
+  }
+
   render() {
     const { size, children } = this.props;
     if (children.length === 2) {
@@ -110,6 +117,9 @@ export class ReactMgr extends React.Component {
               i,
               children.length
             );
+            if (!this.isVisible(position)) {
+              return undefined;
+            }
             const coordinates = this.getCoordinatesByOrientation(position);
             const carouselPageStyle = Object.assign({}, pageSize, {
               position: 'absolute',
