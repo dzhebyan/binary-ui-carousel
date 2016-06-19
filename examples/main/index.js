@@ -49,7 +49,9 @@ class Example extends React.Component {
       <div>
         <div onClick={this.onChangeState} >Change State</div>
         <div id="ReactMgrH1">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal }
+            onPageChanged={ (page) => console.log(`ReactMgrH1: ${colors1[page]}`) }
+          >
             { colors1.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>
             )) }
@@ -57,7 +59,9 @@ class Example extends React.Component {
         </div>
         <br />
         <div id="ReactMgrH2">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } 
+            onPageChanged={ (page) => console.log(`ReactMgrH2: ${colors2[page]}`) }
+          >
             { colors2.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>
             )) }
@@ -65,7 +69,9 @@ class Example extends React.Component {
         </div>
         <br />
         <div id="ReactMgrH3">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } >
+          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } 
+            onPageChanged={ (page) => console.log(`ReactMgrH3: ${colors[page]}`) }
+          >
             { colors.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>
             )) }
@@ -73,7 +79,9 @@ class Example extends React.Component {
         </div>
         <br />
         <div id="ReactMgrV">
-          <ReactMgr id="colors" size={ carouselSizeV } orientation={ Orientation.Vertiacal } >
+          <ReactMgr id="colors" size={ carouselSizeV } orientation={ Orientation.Vertiacal } 
+            onPageChanged={ (page) => console.log(`ReactMgrV: ${colors[page]}`) }
+          >
             { colors.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>
             )) }

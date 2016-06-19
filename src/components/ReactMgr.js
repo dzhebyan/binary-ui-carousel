@@ -1,25 +1,46 @@
 import React from 'react';
+import autobind from 'autobind-decorator';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
 const defaultProps = {
   orientation: Orientation.Horizontal,
 };
 
+const enumType = (Enum) => (
+  React.PropTypes.oneOf(
+    Object.keys(Enum).map(key => Enum[key])
+  )
+);
+
 const propTypes = {
   id: React.PropTypes.string.isRequired,
-  orientation: React.PropTypes.any, // TODO: fix to Scroller.enumType(Orientation)
+  orientation: enumType(Orientation),
   size: React.PropTypes.shape({
     page: React.PropTypes.number,
     margin: React.PropTypes.number,
     containerWidth: React.PropTypes.number,
     containerHeight: React.PropTypes.number,
   }).isRequired,
+  onPageChanged: React.PropTypes.func,
   children: React.PropTypes.arrayOf(
     React.PropTypes.node
   ),
 };
 
 export class ReactMgr extends React.Component {
+
+  @autobind
+  onPageChanged(page) {
+    const { onPageChanged, children } = this.props;
+    if (onPageChanged) {
+      const pageCount = children.length;
+      let newPage = page % pageCount;
+      if (newPage < 0) {
+        newPage += pageCount;
+      }
+      onPageChanged(newPage);
+    }
+  }
 
   getItemPosition(scrollerPosition, item) {
     const { size } = this.props;
@@ -75,7 +96,8 @@ export class ReactMgr extends React.Component {
   }
 
   render() {
-    const { size, children } = this.props;
+    const { size } = this.props;
+    const children = [...this.props.children];
     if (children.length === 2) {
       children.push(children[0]);
       children.push(children[1]);
@@ -110,6 +132,7 @@ export class ReactMgr extends React.Component {
           page={scrollerPage}
           loop={isLoop}
           center
+          onPageChanged={this.onPageChanged}
         >
           {(scrollerPosition) => children.map((child, i) => {
             const position = this.getCarouselItemPosition(

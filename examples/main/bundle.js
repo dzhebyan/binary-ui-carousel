@@ -129,7 +129,11 @@
 	          { id: 'ReactMgrH1' },
 	          React.createElement(
 	            _reactMgr.ReactMgr,
-	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal },
+	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal,
+	              onPageChanged: function onPageChanged(page) {
+	                return console.log('ReactMgrH1: ' + colors1[page]);
+	              }
+	            },
 	            colors1.map(function (color, index) {
 	              return React.createElement(
 	                'div',
@@ -145,7 +149,11 @@
 	          { id: 'ReactMgrH2' },
 	          React.createElement(
 	            _reactMgr.ReactMgr,
-	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal },
+	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal,
+	              onPageChanged: function onPageChanged(page) {
+	                return console.log('ReactMgrH2: ' + colors2[page]);
+	              }
+	            },
 	            colors2.map(function (color, index) {
 	              return React.createElement(
 	                'div',
@@ -161,7 +169,11 @@
 	          { id: 'ReactMgrH3' },
 	          React.createElement(
 	            _reactMgr.ReactMgr,
-	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal },
+	            { id: 'colors', size: carouselSizeH, orientation: _reactMgr.Orientation.Horizontal,
+	              onPageChanged: function onPageChanged(page) {
+	                return console.log('ReactMgrH3: ' + colors[page]);
+	              }
+	            },
 	            colors.map(function (color, index) {
 	              return React.createElement(
 	                'div',
@@ -177,7 +189,11 @@
 	          { id: 'ReactMgrV' },
 	          React.createElement(
 	            _reactMgr.ReactMgr,
-	            { id: 'colors', size: carouselSizeV, orientation: _reactMgr.Orientation.Vertiacal },
+	            { id: 'colors', size: carouselSizeV, orientation: _reactMgr.Orientation.Vertiacal,
+	              onPageChanged: function onPageChanged(page) {
+	                return console.log('ReactMgrV: ' + colors[page]);
+	              }
+	            },
 	            colors.map(function (color, index) {
 	              return React.createElement(
 	                'div',
@@ -20164,7 +20180,7 @@
 
 	var _ReactMgr = __webpack_require__(167);
 
-	var _reactScrolling = __webpack_require__(168);
+	var _reactScrolling = __webpack_require__(169);
 
 	exports.ReactMgr = _ReactMgr.ReactMgr;
 	exports.Orientation = _reactScrolling.Orientation;
@@ -20182,271 +20198,21 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactScrolling = __webpack_require__(168);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var defaultProps = {
-	  orientation: _reactScrolling.Orientation.Horizontal
-	};
-
-	var propTypes = {
-	  id: _react2.default.PropTypes.string.isRequired,
-	  orientation: _react2.default.PropTypes.any, // TODO: fix to Scroller.enumType(Orientation)
-	  size: _react2.default.PropTypes.shape({
-	    page: _react2.default.PropTypes.number,
-	    margin: _react2.default.PropTypes.number,
-	    containerWidth: _react2.default.PropTypes.number,
-	    containerHeight: _react2.default.PropTypes.number
-	  }).isRequired,
-	  children: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.node)
-	};
-
-	var ReactMgr = exports.ReactMgr = function (_React$Component) {
-	  _inherits(ReactMgr, _React$Component);
-
-	  function ReactMgr() {
-	    _classCallCheck(this, ReactMgr);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ReactMgr).apply(this, arguments));
-	  }
-
-	  _createClass(ReactMgr, [{
-	    key: 'getItemPosition',
-	    value: function getItemPosition(scrollerPosition, item) {
-	      var size = this.props.size;
-	      var page = size.page;
-	      var margin = size.margin;
-
-	      return item * (page + margin) + margin + scrollerPosition;
-	    }
-	  }, {
-	    key: 'getCarouselItemPosition',
-	    value: function getCarouselItemPosition(scrollerPosition, item, count) {
-	      var size = this.props.size;
-
-	      var pos = this.getItemPosition(scrollerPosition, item);
-	      if (pos < -size.page) {
-	        pos = this.getItemPosition(scrollerPosition, count + item);
-	      }
-	      return pos;
-	    }
-	  }, {
-	    key: 'getCoordinatesByOrientation',
-	    value: function getCoordinatesByOrientation(position) {
-	      var orientation = this.props.orientation;
-
-	      return orientation === _reactScrolling.Orientation.Horizontal ? {
-	        x: position,
-	        y: 0
-	      } : {
-	        x: 0,
-	        y: position
-	      };
-	    }
-	  }, {
-	    key: 'getContainerScrollableSize',
-	    value: function getContainerScrollableSize() {
-	      var _props = this.props;
-	      var size = _props.size;
-	      var orientation = _props.orientation;
-
-	      return orientation === _reactScrolling.Orientation.Horizontal ? size.containerWidth : size.containerHeight;
-	    }
-	  }, {
-	    key: 'getPageSize',
-	    value: function getPageSize() {
-	      var _props2 = this.props;
-	      var size = _props2.size;
-	      var orientation = _props2.orientation;
-
-	      return orientation === _reactScrolling.Orientation.Horizontal ? {
-	        width: size.page + 'px',
-	        height: '100%'
-	      } : {
-	        width: '100%',
-	        height: size.page + 'px'
-	      };
-	    }
-	  }, {
-	    key: 'isVisible',
-	    value: function isVisible(position) {
-	      var begin = position;
-	      var end = position + this.props.size.page;
-	      var size = this.getContainerScrollableSize();
-	      return begin > 0 && begin < size || end > 0 && end < size;
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props3 = this.props;
-	      var size = _props3.size;
-	      var children = _props3.children;
-
-	      if (children.length === 2) {
-	        children.push(children[0]);
-	        children.push(children[1]);
-	      }
-	      var containerScrollableSize = this.getContainerScrollableSize();
-	      var scrollerSize = {
-	        container: containerScrollableSize,
-	        content: children.length * (size.page + size.margin)
-	      };
-	      var scrollerPage = {
-	        size: size.page,
-	        margin: size.margin
-	      };
-	      var carouselStyle = {
-	        position: 'relative',
-	        width: size.containerWidth,
-	        height: size.containerHeight,
-	        overflow: 'hidden'
-	      };
-	      var pageSize = this.getPageSize();
-	      var isLoop = children.length > 1;
-	      if (!isLoop) {
-	        scrollerSize.content += size.margin;
-	      }
-	      return _react2.default.createElement(
-	        'div',
-	        { style: carouselStyle },
-	        _react2.default.createElement(
-	          _reactScrolling.Scroller,
-	          {
-	            id: 'carousel',
-	            orientation: this.props.orientation,
-	            size: scrollerSize,
-	            pagination: _reactScrolling.Pagination.Single,
-	            page: scrollerPage,
-	            loop: isLoop,
-	            center: true
-	          },
-	          function (scrollerPosition) {
-	            return children.map(function (child, i) {
-	              var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
-	              if (!_this2.isVisible(position)) {
-	                return undefined;
-	              }
-	              var coordinates = _this2.getCoordinatesByOrientation(position);
-	              var carouselPageStyle = Object.assign({}, pageSize, {
-	                position: 'absolute',
-	                transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
-	              });
-	              return _react2.default.createElement(
-	                'div',
-	                { key: i, style: carouselPageStyle },
-	                child
-	              );
-	            });
-	          }
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ReactMgr;
-	}(_react2.default.Component);
-
-	ReactMgr.defaultProps = defaultProps;
-	ReactMgr.propTypes = propTypes;
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Pagination = exports.Orientation = exports.Scroller = undefined;
-
-	var _Scroller = __webpack_require__(169);
-
-	var _Orientation = __webpack_require__(193);
-
-	var Orientation = _interopRequireWildcard(_Orientation);
-
-	var _Pagination = __webpack_require__(194);
-
-	var Pagination = _interopRequireWildcard(_Pagination);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.Scroller = _Scroller.Scroller;
-	exports.Orientation = Orientation;
-	exports.Pagination = Pagination;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Scroller = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _desc, _value, _class;
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _autobindDecorator = __webpack_require__(170);
+	var _autobindDecorator = __webpack_require__(168);
 
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 
-	var _reactGesture = __webpack_require__(171);
-
-	var _reactGesture2 = _interopRequireDefault(_reactGesture);
-
-	var _coordinatesFromEvent = __webpack_require__(177);
-
-	var _reactMotion = __webpack_require__(178);
-
-	var _config = __webpack_require__(192);
-
-	var Config = _interopRequireWildcard(_config);
-
-	var _Orientation = __webpack_require__(193);
-
-	var Orientation = _interopRequireWildcard(_Orientation);
-
-	var _Pagination = __webpack_require__(194);
-
-	var Pagination = _interopRequireWildcard(_Pagination);
-
-	var _Springs = __webpack_require__(195);
-
-	var Springs = _interopRequireWildcard(_Springs);
-
-	var _ScrollerOnPoint = __webpack_require__(196);
-
-	var _PositionCorrectors = __webpack_require__(198);
-
-	var _ArrayPropValue = __webpack_require__(199);
-
-	var _OrientationHelpers = __webpack_require__(197);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	var _reactScrolling = __webpack_require__(169);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -20484,529 +20250,197 @@
 	}
 
 	var defaultProps = {
-	  scale: 1,
-	  orientation: Orientation.Vertiacal,
-	  pagination: Pagination.None,
-	  center: false,
-	  loop: false
+	  orientation: _reactScrolling.Orientation.Horizontal
 	};
 
-	var Scroller = exports.Scroller = (_class = function (_React$Component) {
-	  _inherits(Scroller, _React$Component);
-
-	  function Scroller(props) {
-	    _classCallCheck(this, Scroller);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Scroller).call(this, props));
-
-	    _this.state = {};
-	    if (typeof props.id === 'string') {
-	      _this.setInitialState(props.id, props);
-	    } else {
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-
-	      try {
-	        for (var _iterator = props.id[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var id = _step.value;
-
-	          _this.setInitialState(id, props);
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	    }
-	    _this.autosize = props.size.content === undefined;
-	    return _this;
-	  }
-
-	  _createClass(Scroller, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.updateContentSize();
-	      this.correctOutOfTheBox(this.props, null);
-	      if (this.props.loop) {
-	        this.correctPagination(this.props, null);
-	      }
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(props) {
-	      this.updateContentSize();
-	      if (!this.lock) {
-	        this.correctPagination(props, null);
-	        if (!this.props.loop) {
-	          this.correctOutOfTheBox(props);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'getInitialPosition',
-	    value: function getInitialPosition(scrollerId) {
-	      var props = arguments.length <= 1 || arguments[1] === undefined ? this.props : arguments[1];
-
-	      var pagination = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.pagination);
-	      if (pagination === Pagination.First) {
-	        var pageSize = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.page.size);
-	        var pageMargin = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.page.margin);
-	        return -(pageSize + 2 * pageMargin);
-	      }
-	      return 0;
-	    }
-	  }, {
-	    key: 'getSignedVelocity',
-	    value: function getSignedVelocity(e) {
-	      var orientation = this.props.orientation;
-
-	      var velocityProp = 'velocity' + _OrientationHelpers.orientationProp[orientation].toUpperCase();
-	      var signedVelocity = e.gesture[velocityProp];
-	      if (Math.abs(signedVelocity) < Config.FLICK_THRESHOLD) {
-	        signedVelocity = 0;
-	      } else {
-	        var deltaProp = 'delta' + _OrientationHelpers.orientationProp[orientation].toUpperCase();
-	        signedVelocity *= Math.sign(e.gesture[deltaProp]);
-	      }
-	      return signedVelocity;
-	    }
-	  }, {
-	    key: 'getSpringStyle',
-	    value: function getSpringStyle() {
-	      var springStyle = {};
-	      var state = this.state;
-	      for (var scrollerId in state) {
-	        if (state.hasOwnProperty(scrollerId)) {
-	          if (state[scrollerId].spring !== null) {
-	            springStyle[scrollerId] = (0, _reactMotion.spring)(state[scrollerId].position, state[scrollerId].spring);
-	          } else {
-	            springStyle[scrollerId] = state[scrollerId].position;
-	          }
-	        }
-	      }
-	      return springStyle;
-	    }
-	  }, {
-	    key: 'getContainerStyle',
-	    value: function getContainerStyle() {
-	      var containerStyle = {
-	        overflow: 'hidden',
-	        width: '100%',
-	        height: '100%'
-	      };
-	      containerStyle[_OrientationHelpers.orientationSize[this.props.orientation]] = this.props.size.container + 'px';
-	      return containerStyle;
-	    }
-	  }, {
-	    key: 'getTransformString',
-	    value: function getTransformString(position) {
-	      var translate = { x: 0, y: 0 };
-	      translate[_OrientationHelpers.orientationProp[this.props.orientation]] = position;
-	      return 'translate3d(' + translate.x + 'px, ' + translate.y + 'px, 0px)';
-	    }
-	  }, {
-	    key: 'moveScroller',
-	    value: function moveScroller(newPosition) {
-	      var id = arguments.length <= 1 || arguments[1] === undefined ? this.props.id : arguments[1];
-	      var springValue = arguments.length <= 2 || arguments[2] === undefined ? Springs.Normal : arguments[2];
-
-	      if (id in this.state) {
-	        var newPartialState = {};
-	        newPartialState[id] = {
-	          position: newPosition,
-	          spring: springValue
-	        };
-	        this.setState(newPartialState);
-	      }
-	    }
-	  }, {
-	    key: 'moveScrollerWithinBox',
-	    value: function moveScrollerWithinBox(delta, scrollerId) {
-	      if (scrollerId in this.state) {
-	        var oldPosition = this.state[scrollerId].position;
-	        var newPosition = oldPosition + delta;
-	        var finalPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(newPosition, scrollerId, this.props);
-	        if (finalPosition !== oldPosition) {
-	          this.moveScroller(finalPosition, scrollerId);
-	          return true;
-	        }
-	      }
-	      return false;
-	    }
-	  }, {
-	    key: 'moveScrollerToPage',
-	    value: function moveScrollerToPage(page, scrollerId, margin) {
-	      if (scrollerId in this.state) {
-	        var position = (0, _PositionCorrectors.pagePositionForScroller)(page, scrollerId, this.props, margin);
-	        this.moveScroller(position, scrollerId);
-	      }
-	    }
-	  }, {
-	    key: 'currentPage',
-	    value: function currentPage(scrollerId) {
-	      if (scrollerId in this.state) {
-	        return (0, _PositionCorrectors.pageNumberForPosition)(this.state[scrollerId].position, scrollerId, this.props);
-	      }
-	      return undefined;
-	    }
-	  }, {
-	    key: 'isScrolling',
-	    value: function isScrolling() {
-	      return this.lock !== undefined && this.lock.swiped;
-	    }
-	  }, {
-	    key: 'releaseScroller',
-	    value: function releaseScroller() {
-	      this.handleEventEnd({
-	        gesture: {
-	          velocityX: 0,
-	          velocityY: 0
-	        }
-	      });
-	    }
-	  }, {
-	    key: 'scrollerPosition',
-	    value: function scrollerPosition() {
-	      var scrollerId = arguments.length <= 0 || arguments[0] === undefined ? this.props.id : arguments[0];
-
-	      return this.state[scrollerId].position;
-	    }
-	  }, {
-	    key: 'allPositions',
-	    value: function allPositions() {
-	      var res = {};
-	      for (var scrollerId in this.state) {
-	        if (this.state.hasOwnProperty(scrollerId)) {
-	          res[scrollerId] = this.state[scrollerId].position;
-	        }
-	      }
-	      return res;
-	    }
-	  }, {
-	    key: 'correctOutOfTheBox',
-	    value: function correctOutOfTheBox() {
-	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
-	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
-
-	      for (var scrollerId in this.state) {
-	        if (this.state.hasOwnProperty(scrollerId)) {
-	          var oldPosition = this.state[scrollerId].position;
-	          var newPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(oldPosition, scrollerId, props);
-	          if (newPosition !== oldPosition) {
-	            this.moveScroller(newPosition, scrollerId, springValue);
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'correctPagination',
-	    value: function correctPagination() {
-	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
-	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
-
-	      for (var scrollerId in this.state) {
-	        if (this.state.hasOwnProperty(scrollerId)) {
-	          if ((0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.pagination) !== Pagination.None) {
-	            var oldPosition = this.state[scrollerId].position;
-	            var ignorePagination = oldPosition === 0 && !props.loop;
-	            if (!ignorePagination) {
-	              var newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, props);
-	              if (newPosition !== oldPosition) {
-	                this.moveScroller(newPosition, scrollerId, springValue);
-	              }
-	            }
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'correctPosition',
-	    value: function correctPosition() {
-	      this.correctPagination();
-	      this.correctOutOfTheBox();
-	    }
-	  }, {
-	    key: 'setInitialState',
-	    value: function setInitialState(scrollerId, props) {
-	      this.state[scrollerId] = {
-	        position: this.getInitialPosition(scrollerId, props),
-	        spring: Springs.Normal
-	      };
-	    }
-	  }, {
-	    key: 'lockPage',
-	    value: function lockPage() {
-	      var scroller = this.lock.scroller;
-
-	      if ((0, _ArrayPropValue.getPropValueForScroller)(scroller, this.props.id, this.props.pagination) === Pagination.Single) {
-	        this.lock.page = this.currentPage(scroller);
-	      }
-	    }
-	  }, {
-	    key: 'stopLockedScroller',
-	    value: function stopLockedScroller() {
-	      var scroller = this.lock.scroller;
-
-	      if (this.lastRenderedStyle[scroller] !== this.state[scroller].position) {
-	        this.moveScroller(this.lastRenderedStyle[scroller], scroller, null);
-	        this.lock.swiped = true;
-	      }
-	    }
-	  }, {
-	    key: 'correctLoopPosition',
-	    value: function correctLoopPosition(position) {
-	      var pos = position % this.props.size.content;
-	      if (pos > 0) {
-	        pos -= this.props.size.content;
-	      }
-	      return pos;
-	    }
-	  }, {
-	    key: 'isSwipeInRightDirection',
-	    value: function isSwipeInRightDirection(e) {
-	      var orientation = this.props.orientation;
-
-	      var direction = e.gesture.type.replace('swipe', '');
-	      return _OrientationHelpers.orientationDirection[orientation].indexOf(direction) >= 0;
-	    }
-	  }, {
-	    key: 'isOutOfTheBox',
-	    value: function isOutOfTheBox(position) {
-	      return !this.props.loop && (0, _PositionCorrectors.outOfTheBoxCorrection)(position, this.lock.scroller, this.props) !== position;
-	    }
-	  }, {
-	    key: 'handleEventBegin',
-	    value: function handleEventBegin(e) {
-	      var orientation = this.props.orientation;
-
-	      if (!this.lock && !Scroller.Locks[orientation]) {
-	        var coordinates = (0, _coordinatesFromEvent.eventCoordinates)(e, this.props.scale, Scroller.windowWidth);
-	        var coordinateValue = coordinates[_OrientationHelpers.orientationProp[orientation]];
-
-	        var scroller = (0, _ScrollerOnPoint.scrollerOnPoint)(coordinates, this.props);
-	        if (scroller) {
-	          this.lock = {
-	            scroller: scroller,
-	            coordinateValue: coordinateValue
-	          };
-	          Scroller.Locks[orientation] = scroller;
-	          this.lockPage();
-	          this.stopLockedScroller();
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'handleEventEnd',
-	    value: function handleEventEnd(e) {
-	      var orientation = this.props.orientation;
-
-	      if (this.lock && this.lock.swiped) {
-	        var signedVelocity = this.getSignedVelocity(e);
-	        var springValue = Springs.Move;
-	        var newPosition = this.state[this.lock.scroller].position;
-	        var pagination = (0, _ArrayPropValue.getPropValueForScroller)(this.lock.scroller, this.props.id, this.props.pagination);
-	        if (pagination === Pagination.Single) {
-	          newPosition = (0, _PositionCorrectors.paginationCorrection)(newPosition, this.lock.scroller, this.props, Math.sign(signedVelocity), this.lock.page);
-	        } else {
-	          newPosition = (0, _PositionCorrectors.velocityPositionCorrection)(newPosition, this.lock.scroller, signedVelocity);
-	          if (pagination === Pagination.Multiple || pagination === Pagination.First) {
-	            newPosition = (0, _PositionCorrectors.paginationCorrection)(newPosition, this.lock.scroller, this.props, 0, undefined, // prevSinglePage
-	            pagination === Pagination.First);
-	            springValue = Springs.Bounce;
-	          }
-	        }
-
-	        var finalPosition = newPosition;
-	        if (!this.props.loop) {
-	          finalPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(newPosition, this.lock.scroller, this.props);
-	        }
-	        if (newPosition !== finalPosition) {
-	          springValue = Springs.Bounce;
-	        }
-	        this.moveScroller(finalPosition, this.lock.scroller, springValue);
-	      }
-	      Scroller.Locks[orientation] = undefined;
-	      this.lock = undefined;
-	    }
-	  }, {
-	    key: 'handleSwipe',
-	    value: function handleSwipe(e) {
-	      var orientation = this.props.orientation;
-
-	      if (this.isSwipeInRightDirection(e)) {
-	        if (this.lock && Scroller.Locks[orientation] === this.lock.scroller) {
-	          var coordinates = (0, _coordinatesFromEvent.eventCoordinates)(e, this.props.scale, Scroller.windowWidth);
-	          var coordinateValue = coordinates[_OrientationHelpers.orientationProp[orientation]];
-	          var delta = coordinateValue - this.lock.coordinateValue;
-
-	          var oldPosition = this.state[this.lock.scroller].position;
-	          var newPosition = oldPosition + delta;
-	          if (this.isOutOfTheBox(newPosition)) {
-	            newPosition = oldPosition + delta * Config.OUT_OF_THE_BOX_ACCELERATION;
-	          }
-
-	          this.lock.coordinateValue = coordinateValue;
-	          this.lock.swiped = true;
-	          this.moveScroller(newPosition, this.lock.scroller);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'updateContentSize',
-	    value: function updateContentSize() {
-	      if (!this.autosize || this.contentDom === undefined) {
-	        return;
-	      }
-	      var sizeProp = _OrientationHelpers.orientationSize[this.props.orientation];
-	      var capitalSizeProp = sizeProp.charAt(0).toUpperCase() + sizeProp.slice(1);
-	      this.props.size.content = this.contentDom['client' + capitalSizeProp];
-	    }
-	  }, {
-	    key: 'initContentDom',
-	    value: function initContentDom(ref) {
-	      this.contentDom = ref;
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var springStyle = this.getSpringStyle();
-
-	      return _react2.default.createElement(
-	        _reactMotion.Motion,
-	        { style: springStyle },
-	        function (style) {
-	          _this2.lastRenderedStyle = style;
-	          var children = null;
-	          if (typeof _this2.props.id === 'string') {
-	            if (typeof _this2.props.children === 'function') {
-	              var pos = style[_this2.props.id];
-	              if (_this2.props.loop) {
-	                pos = _this2.correctLoopPosition(pos);
-	              }
-	              children = _this2.props.children(pos);
-	            } else {
-	              var containerStyle = _this2.getContainerStyle();
-	              var containerItemStyle = {
-	                transform: _this2.getTransformString(style[_this2.props.id])
-	              };
-	              children = _react2.default.createElement(
-	                'div',
-	                { style: containerStyle },
-	                _react2.default.createElement(
-	                  'div',
-	                  { style: containerItemStyle, ref: _this2.initContentDom },
-	                  _this2.props.children
-	                )
-	              );
-	            }
-	          } else {
-	            children = _this2.props.children(style);
-	          }
-	          if (children instanceof Array) {
-	            children = _react2.default.createElement(
-	              'div',
-	              null,
-	              children
-	            );
-	          }
-	          return _react2.default.createElement(
-	            _reactGesture2.default,
-	            {
-	              onTouchStart: _this2.handleEventBegin,
-	              onMouseDown: _this2.handleEventBegin,
-	              onTouchEnd: _this2.handleEventEnd,
-	              onMouseUp: _this2.handleEventEnd,
-	              onSwipeLeft: _this2.handleSwipe,
-	              onSwipeRight: _this2.handleSwipe,
-	              onSwipeUp: _this2.handleSwipe,
-	              onSwipeDown: _this2.handleSwipe
-	            },
-	            children
-	          );
-	        }
-	      );
-	    }
-	  }]);
-
-	  return Scroller;
-	}(_react2.default.Component), (_applyDecoratedDescriptor(_class.prototype, 'handleEventBegin', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'handleEventBegin'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'handleEventEnd', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'handleEventEnd'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'handleSwipe', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'handleSwipe'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'initContentDom', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'initContentDom'), _class.prototype)), _class);
-
-
-	Scroller.Locks = {};
-	Scroller.windowWidth = window.innerWidth;
-
-	Scroller.valueOrArray = function (ReactType) {
-	  return _react2.default.PropTypes.oneOfType([ReactType, _react2.default.PropTypes.arrayOf(ReactType)]);
-	};
-
-	Scroller.enumType = function (Enum) {
+	var enumType = function enumType(Enum) {
 	  return _react2.default.PropTypes.oneOf(Object.keys(Enum).map(function (key) {
 	    return Enum[key];
 	  }));
 	};
 
 	var propTypes = {
-	  id: Scroller.valueOrArray(_react2.default.PropTypes.string).isRequired,
-	  orientation: Scroller.enumType(Orientation),
-	  pagination: Scroller.valueOrArray(Scroller.enumType(Pagination)),
-	  center: Scroller.valueOrArray(_react2.default.PropTypes.bool),
-	  loop: Scroller.valueOrArray(_react2.default.PropTypes.bool),
+	  id: _react2.default.PropTypes.string.isRequired,
+	  orientation: enumType(_reactScrolling.Orientation),
 	  size: _react2.default.PropTypes.shape({
-	    container: Scroller.valueOrArray(_react2.default.PropTypes.number),
-	    content: Scroller.valueOrArray(_react2.default.PropTypes.number)
+	    page: _react2.default.PropTypes.number,
+	    margin: _react2.default.PropTypes.number,
+	    containerWidth: _react2.default.PropTypes.number,
+	    containerHeight: _react2.default.PropTypes.number
 	  }).isRequired,
-	  page: _react2.default.PropTypes.shape({
-	    size: Scroller.valueOrArray(_react2.default.PropTypes.number),
-	    margin: Scroller.valueOrArray(_react2.default.PropTypes.number)
-	  }),
-	  multiple: _react2.default.PropTypes.shape({
-	    before: _react2.default.PropTypes.number,
-	    between: _react2.default.PropTypes.number,
-	    size: _react2.default.PropTypes.number
-	  }),
-	  scale: _react2.default.PropTypes.number,
-	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.func, _react2.default.PropTypes.node])
+	  onPageChanged: _react2.default.PropTypes.func,
+	  children: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.node)
 	};
 
-	Scroller.propTypes = propTypes;
-	Scroller.defaultProps = defaultProps;
+	var ReactMgr = exports.ReactMgr = (_class = function (_React$Component) {
+	  _inherits(ReactMgr, _React$Component);
 
-	/*
-	const propsExample = {
-	  id: ['scr-a', 'scr-b'],
-	  orientation: Orientation.Horizontal, // single value only
-	  pagination: [Pagination.Multiple, Pagination.None],
-	  center: [true, false],
-	  size: {
-	    container: 1366,
-	    content: [900, 2000]
-	  },
-	  page: {
-	    size: 300,
-	    margin: 30
-	  },
-	  multiple: {
-	    before: 30,
-	    between: 200,
-	    size: 400
+	  function ReactMgr() {
+	    _classCallCheck(this, ReactMgr);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ReactMgr).apply(this, arguments));
 	  }
-	};
-	*/
+
+	  _createClass(ReactMgr, [{
+	    key: 'onPageChanged',
+	    value: function onPageChanged(page) {
+	      var _props = this.props;
+	      var onPageChanged = _props.onPageChanged;
+	      var children = _props.children;
+
+	      if (onPageChanged) {
+	        var pageCount = children.length;
+	        var newPage = page % pageCount;
+	        if (newPage < 0) {
+	          newPage += pageCount;
+	        }
+	        onPageChanged(newPage);
+	      }
+	    }
+	  }, {
+	    key: 'getItemPosition',
+	    value: function getItemPosition(scrollerPosition, item) {
+	      var size = this.props.size;
+	      var page = size.page;
+	      var margin = size.margin;
+
+	      return item * (page + margin) + margin + scrollerPosition;
+	    }
+	  }, {
+	    key: 'getCarouselItemPosition',
+	    value: function getCarouselItemPosition(scrollerPosition, item, count) {
+	      var size = this.props.size;
+
+	      var pos = this.getItemPosition(scrollerPosition, item);
+	      if (pos < -size.page) {
+	        pos = this.getItemPosition(scrollerPosition, count + item);
+	      }
+	      return pos;
+	    }
+	  }, {
+	    key: 'getCoordinatesByOrientation',
+	    value: function getCoordinatesByOrientation(position) {
+	      var orientation = this.props.orientation;
+
+	      return orientation === _reactScrolling.Orientation.Horizontal ? {
+	        x: position,
+	        y: 0
+	      } : {
+	        x: 0,
+	        y: position
+	      };
+	    }
+	  }, {
+	    key: 'getContainerScrollableSize',
+	    value: function getContainerScrollableSize() {
+	      var _props2 = this.props;
+	      var size = _props2.size;
+	      var orientation = _props2.orientation;
+
+	      return orientation === _reactScrolling.Orientation.Horizontal ? size.containerWidth : size.containerHeight;
+	    }
+	  }, {
+	    key: 'getPageSize',
+	    value: function getPageSize() {
+	      var _props3 = this.props;
+	      var size = _props3.size;
+	      var orientation = _props3.orientation;
+
+	      return orientation === _reactScrolling.Orientation.Horizontal ? {
+	        width: size.page + 'px',
+	        height: '100%'
+	      } : {
+	        width: '100%',
+	        height: size.page + 'px'
+	      };
+	    }
+	  }, {
+	    key: 'isVisible',
+	    value: function isVisible(position) {
+	      var begin = position;
+	      var end = position + this.props.size.page;
+	      var size = this.getContainerScrollableSize();
+	      return begin > 0 && begin < size || end > 0 && end < size;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var size = this.props.size;
+
+	      var children = [].concat(_toConsumableArray(this.props.children));
+	      if (children.length === 2) {
+	        children.push(children[0]);
+	        children.push(children[1]);
+	      }
+	      var containerScrollableSize = this.getContainerScrollableSize();
+	      var scrollerSize = {
+	        container: containerScrollableSize,
+	        content: children.length * (size.page + size.margin)
+	      };
+	      var scrollerPage = {
+	        size: size.page,
+	        margin: size.margin
+	      };
+	      var carouselStyle = {
+	        position: 'relative',
+	        width: size.containerWidth,
+	        height: size.containerHeight,
+	        overflow: 'hidden'
+	      };
+	      var pageSize = this.getPageSize();
+	      var isLoop = children.length > 1;
+	      if (!isLoop) {
+	        scrollerSize.content += size.margin;
+	      }
+	      return _react2.default.createElement(
+	        'div',
+	        { style: carouselStyle },
+	        _react2.default.createElement(
+	          _reactScrolling.Scroller,
+	          {
+	            id: 'carousel',
+	            orientation: this.props.orientation,
+	            size: scrollerSize,
+	            pagination: _reactScrolling.Pagination.Single,
+	            page: scrollerPage,
+	            loop: isLoop,
+	            center: true,
+	            onPageChanged: this.onPageChanged
+	          },
+	          function (scrollerPosition) {
+	            return children.map(function (child, i) {
+	              var position = _this2.getCarouselItemPosition(scrollerPosition, i, children.length);
+	              if (!_this2.isVisible(position)) {
+	                return undefined;
+	              }
+	              var coordinates = _this2.getCoordinatesByOrientation(position);
+	              var carouselPageStyle = Object.assign({}, pageSize, {
+	                position: 'absolute',
+	                transform: 'translate3d(' + coordinates.x + 'px, ' + coordinates.y + 'px, 0px)'
+	              });
+	              return _react2.default.createElement(
+	                'div',
+	                { key: i, style: carouselPageStyle },
+	                child
+	              );
+	            });
+	          }
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ReactMgr;
+	}(_react2.default.Component), (_applyDecoratedDescriptor(_class.prototype, 'onPageChanged', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onPageChanged'), _class.prototype)), _class);
+
+
+	ReactMgr.defaultProps = defaultProps;
+	ReactMgr.propTypes = propTypes;
 
 /***/ },
-/* 170 */
+/* 168 */
 /***/ function(module, exports) {
 
 	/**
@@ -21108,6 +20542,778 @@
 
 
 /***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Pagination = exports.Orientation = exports.Scroller = undefined;
+
+	var _Scroller = __webpack_require__(170);
+
+	var _Orientation = __webpack_require__(193);
+
+	var Orientation = _interopRequireWildcard(_Orientation);
+
+	var _Pagination = __webpack_require__(194);
+
+	var Pagination = _interopRequireWildcard(_Pagination);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.Scroller = _Scroller.Scroller;
+	exports.Orientation = Orientation;
+	exports.Pagination = Pagination;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Scroller = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _desc, _value, _class;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _autobindDecorator = __webpack_require__(168);
+
+	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+
+	var _reactGesture = __webpack_require__(171);
+
+	var _reactGesture2 = _interopRequireDefault(_reactGesture);
+
+	var _coordinatesFromEvent = __webpack_require__(177);
+
+	var _reactMotion = __webpack_require__(178);
+
+	var _config = __webpack_require__(192);
+
+	var Config = _interopRequireWildcard(_config);
+
+	var _Orientation = __webpack_require__(193);
+
+	var Orientation = _interopRequireWildcard(_Orientation);
+
+	var _Pagination = __webpack_require__(194);
+
+	var Pagination = _interopRequireWildcard(_Pagination);
+
+	var _Springs = __webpack_require__(195);
+
+	var Springs = _interopRequireWildcard(_Springs);
+
+	var _ScrollerOnPoint = __webpack_require__(196);
+
+	var _PositionCorrectors = __webpack_require__(198);
+
+	var _ArrayPropValue = __webpack_require__(199);
+
+	var _OrientationHelpers = __webpack_require__(197);
+
+	var _effects = __webpack_require__(200);
+
+	var _styleApi = __webpack_require__(201);
+
+	var _properties = __webpack_require__(203);
+
+	var _logic = __webpack_require__(204);
+
+	var _StateHelpers = __webpack_require__(205);
+
+	var _ScrollerLocks = __webpack_require__(206);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	  var desc = {};
+	  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+	    desc[key] = descriptor[key];
+	  });
+	  desc.enumerable = !!desc.enumerable;
+	  desc.configurable = !!desc.configurable;
+
+	  if ('value' in desc || desc.initializer) {
+	    desc.writable = true;
+	  }
+
+	  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+	    return decorator(target, property, desc) || desc;
+	  }, desc);
+
+	  if (context && desc.initializer !== void 0) {
+	    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+	    desc.initializer = undefined;
+	  }
+
+	  if (desc.initializer === void 0) {
+	    Object['define' + 'Property'](target, property, desc);
+	    desc = null;
+	  }
+
+	  return desc;
+	}
+
+	var defaultProps = {
+	  scale: 1,
+	  orientation: Orientation.Vertiacal,
+	  pagination: Pagination.None,
+	  center: false,
+	  loop: false
+	};
+
+	var windowWidth = window.innerWidth;
+
+	var Scroller = exports.Scroller = (_class = function (_React$Component) {
+	  _inherits(Scroller, _React$Component);
+
+	  function Scroller(props) {
+	    _classCallCheck(this, Scroller);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Scroller).call(this, props));
+
+	    _this.state = (0, _StateHelpers.getInitialState)(props);
+	    return _this;
+	  }
+
+	  _createClass(Scroller, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.correctOutOfTheBox(this.props, null);
+	      if (this.props.loop) {
+	        this.correctPagination(this.props, null);
+	      }
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate() /* nextProps, nextState */{
+	      return true;
+	      /*
+	      for (let i = 0; i < nextState.scrollers.length; ++i) {
+	        if (nextState.scrollers[i].position !== this.state.scrollers[i].position) {
+	          return true;
+	        }
+	      }
+	      if (nextProps.size !== this.props.size) {
+	        return true;
+	      }
+	      if (nextProps.size.container !== this.props.size.container) {
+	        return true;
+	      }
+	      if (nextProps.size.content !== this.props.size.content) {
+	        return true;
+	      }
+	      if (nextProps.page !== this.props.page) {
+	        return true;
+	      }
+	      if (nextProps.page !== undefined) {
+	        if (nextProps.page.size !== this.props.page.size) {
+	          return true;
+	        }
+	        if (nextProps.page.margin !== this.props.page.margin) {
+	          return true;
+	        }
+	      }
+	      if (nextProps.multiple !== this.props.multiple) {
+	        return true;
+	      }
+	      if (nextProps.multiple !== undefined) {
+	        if (nextProps.multiple.before !== this.props.multiple.before) {
+	          return true;
+	        }
+	        if (nextProps.multiple.between !== this.props.multiple.between) {
+	          return true;
+	        }
+	        if (nextProps.multiple.size !== this.props.multiple.size) {
+	          return true;
+	        }
+	      }
+	      return false;
+	      */
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.updateContentSize();
+	      if (!this.getLock()) {
+	        this.correctPagination(this.props, null);
+	        if (!this.props.loop) {
+	          this.correctOutOfTheBox(this.props);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'onEventBegin',
+	    value: function onEventBegin(e) {
+	      var orientation = this.props.orientation;
+
+	      if (!this.getLock() && !(0, _ScrollerLocks.isScrollerLocked)(orientation)) {
+	        var coordinates = (0, _coordinatesFromEvent.eventCoordinates)(e, this.props.scale, windowWidth);
+	        var coordinateValue = (0, _logic.getCoordinatesByOrientation)(coordinates, orientation);
+	        var scroller = (0, _ScrollerOnPoint.scrollerOnPoint)(coordinates, this.props);
+	        if (scroller) {
+	          this.setLocker(orientation, scroller, coordinateValue);
+	          this.lockPage();
+	          this.stopLockedScroller();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'onEventEnd',
+	    value: function onEventEnd(e) {
+	      var orientation = this.props.orientation;
+
+	      if (!this.getLock() || !this.getLockedSwiped()) {
+	        this.setLockerEmpty(orientation);
+	        return;
+	      }
+	      var signedVelocity = this.getSignedVelocity(e);
+	      var scrollerId = this.getLockedScroller();
+	      var oldPosition = (0, _StateHelpers.getScrollerPosition)(this.state, scrollerId);
+	      var newPosition = oldPosition;
+	      var pagination = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, this.props.id, this.props.pagination);
+	      if (pagination === Pagination.Single) {
+	        newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, this.props, Math.sign(signedVelocity), this.getLockedPage());
+	      } else {
+	        oldPosition = (0, _PositionCorrectors.velocityPositionCorrection)(oldPosition, scrollerId, signedVelocity);
+	        newPosition = oldPosition;
+	        if (pagination === Pagination.Multiple || pagination === Pagination.First) {
+	          newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, this.props, 0, undefined, // prevSinglePage
+	          pagination === Pagination.First);
+	        }
+	      }
+	      newPosition = this.getFinalPosition(newPosition);
+	      var paginationSpring = (0, _effects.getSpringByPagination)(pagination);
+	      var adjustedSpring = (0, _effects.getAdjustedSpring)(oldPosition, newPosition, paginationSpring);
+	      if ((0, _StateHelpers.getScrollerPosition)(this.state, scrollerId) !== newPosition) {
+	        this.checkPageChanged(scrollerId, newPosition);
+	        this.moveScroller(newPosition, scrollerId, adjustedSpring);
+	        this.autoScrolling = true;
+	      }
+	      this.setLockerEmpty(orientation);
+	    }
+	  }, {
+	    key: 'onSwipe',
+	    value: function onSwipe(e) {
+	      if (!this.isSwipeInRightDirection(e)) {
+	        return;
+	      }
+	      var orientation = this.props.orientation;
+
+	      if (this.getLock() && (0, _ScrollerLocks.getScrollerLock)(orientation) === this.getLockedScroller()) {
+	        var scrollerId = this.getLockedScroller();
+	        var coordinates = (0, _coordinatesFromEvent.eventCoordinates)(e, this.props.scale, windowWidth);
+	        var coordinateValue = (0, _logic.getCoordinatesByOrientation)(coordinates, orientation);
+	        var delta = coordinateValue - this.getLockedCoordinateValue();
+	        var oldPosition = (0, _StateHelpers.getScrollerPosition)(this.state, scrollerId);
+	        var newPosition = oldPosition + delta;
+	        if (this.isOutOfTheBox(newPosition)) {
+	          newPosition = oldPosition + delta * Config.OUT_OF_THE_BOX_ACCELERATION;
+	        }
+	        this.setLockedCoordinateValue(coordinateValue);
+	        this.setLockedSwiped(true);
+	        this.moveScroller(newPosition, scrollerId);
+	      }
+	    }
+	  }, {
+	    key: 'onSetContentDom',
+	    value: function onSetContentDom(ref) {
+	      this.contentDom = ref;
+	    }
+	  }, {
+	    key: 'getSignedVelocity',
+	    value: function getSignedVelocity(e) {
+	      var orientation = this.props.orientation;
+
+	      var velocityProp = (0, _properties.getVelocityProp)(orientation);
+	      var signedVelocity = e.gesture[velocityProp];
+	      if (Math.abs(signedVelocity) < Config.FLICK_THRESHOLD) {
+	        return 0;
+	      }
+	      var deltaProp = (0, _properties.getDeltaProp)(orientation);
+	      return signedVelocity * Math.sign(e.gesture[deltaProp]);
+	    }
+	  }, {
+	    key: 'getTransformString',
+	    value: function getTransformString(position) {
+	      var initTranslate = { x: 0, y: 0 };
+	      var orientation = this.props.orientation;
+
+	      var translate = (0, _logic.setOrientationPos)(initTranslate, orientation, position);
+	      return (0, _properties.getTranslate3D)(translate);
+	    }
+	  }, {
+	    key: 'getFinalPosition',
+	    value: function getFinalPosition(newPosition) {
+	      if (this.props.loop) {
+	        return newPosition;
+	      }
+	      return (0, _PositionCorrectors.outOfTheBoxCorrection)(newPosition, this.getLockedScroller(), this.props, this.contentAutoSize);
+	    }
+	  }, {
+	    key: 'getLock',
+	    value: function getLock() {
+	      return this.lock;
+	    }
+	  }, {
+	    key: 'getLockedScroller',
+	    value: function getLockedScroller() {
+	      return this.lock.scroller;
+	    }
+	  }, {
+	    key: 'getLockedSwiped',
+	    value: function getLockedSwiped() {
+	      return this.lock.swiped;
+	    }
+	  }, {
+	    key: 'getLockedPage',
+	    value: function getLockedPage() {
+	      return this.lock.page;
+	    }
+	  }, {
+	    key: 'getLockedCoordinateValue',
+	    value: function getLockedCoordinateValue() {
+	      return this.lock.coordinateValue;
+	    }
+	  }, {
+	    key: 'setLock',
+	    value: function setLock(lock) {
+	      this.lock = lock;
+	    }
+	  }, {
+	    key: 'setLockedCoordinateValue',
+	    value: function setLockedCoordinateValue(coordinateValue) {
+	      this.lock.coordinateValue = coordinateValue;
+	    }
+	  }, {
+	    key: 'setLockedPageLocked',
+	    value: function setLockedPageLocked() {
+	      var _getLock = this.getLock();
+
+	      var scroller = _getLock.scroller;
+
+	      this.lock.page = this.currentPage(scroller);
+	    }
+	  }, {
+	    key: 'setLockedSwiped',
+	    value: function setLockedSwiped(swiped) {
+	      this.lock.swiped = swiped;
+	    }
+	  }, {
+	    key: 'setLockerEmpty',
+	    value: function setLockerEmpty(orientation) {
+	      this.lock = undefined;
+	      (0, _ScrollerLocks.emptyScrollerLock)(orientation);
+	    }
+	  }, {
+	    key: 'setLocker',
+	    value: function setLocker(orientation, scroller, coordinateValue) {
+	      this.lock = {
+	        scroller: scroller,
+	        coordinateValue: coordinateValue
+	      };
+	      (0, _ScrollerLocks.setScrollerLock)(orientation, scroller);
+	    }
+	  }, {
+	    key: 'getLastRenderedStyle',
+	    value: function getLastRenderedStyle(scrollerId) {
+	      return this.lastRenderedStyle[scrollerId];
+	    }
+	  }, {
+	    key: 'getLastRenderedStyleForLocked',
+	    value: function getLastRenderedStyleForLocked() {
+	      return this.lastRenderedStyle[this.getLock().scroller];
+	    }
+	  }, {
+	    key: 'setLastRenderedStyle',
+	    value: function setLastRenderedStyle(style) {
+	      this.lastRenderedStyle = style;
+	    }
+	  }, {
+	    key: 'moveScroller',
+	    value: function moveScroller(newPosition) {
+	      var id = arguments.length <= 1 || arguments[1] === undefined ? this.props.id : arguments[1];
+	      var springValue = arguments.length <= 2 || arguments[2] === undefined ? Springs.Normal : arguments[2];
+
+	      var state = this.state;
+	      if ((0, _StateHelpers.scrollerExists)(state, id)) {
+	        this.setState((0, _StateHelpers.moveScrollerNewPartialState)(state, id, newPosition, springValue));
+	      }
+	    }
+	  }, {
+	    key: 'moveScrollerWithinBox',
+	    value: function moveScrollerWithinBox(delta, scrollerId) {
+	      var state = this.state;
+	      if (!(0, _StateHelpers.scrollerExists)(state, scrollerId)) {
+	        return false;
+	      }
+	      var oldPosition = (0, _StateHelpers.getScrollerPosition)(state, scrollerId);
+	      var newPosition = oldPosition + delta;
+	      var finalPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(newPosition, scrollerId, this.props, this.contentAutoSize);
+	      if (finalPosition !== oldPosition) {
+	        this.moveScroller(finalPosition, scrollerId);
+	        return true;
+	      }
+	      return false;
+	    }
+	  }, {
+	    key: 'moveScrollerToPage',
+	    value: function moveScrollerToPage(page, scrollerId, margin) {
+	      if ((0, _StateHelpers.scrollerExists)(this.state, scrollerId)) {
+	        var position = (0, _PositionCorrectors.pagePositionForScroller)(page, scrollerId, this.props, margin);
+	        this.moveScroller(position, scrollerId);
+	      }
+	    }
+	  }, {
+	    key: 'currentPage',
+	    value: function currentPage(scrollerId) {
+	      var state = this.state;
+	      if (!(0, _StateHelpers.scrollerExists)(state, scrollerId)) {
+	        return undefined;
+	      }
+	      return (0, _PositionCorrectors.pageNumberForPosition)((0, _StateHelpers.getScrollerPosition)(state, scrollerId), scrollerId, this.props);
+	    }
+	  }, {
+	    key: 'isScrolling',
+	    value: function isScrolling() {
+	      return this.getLock() !== undefined && this.getLockedSwiped() || this.autoScrolling;
+	    }
+	  }, {
+	    key: 'releaseScroller',
+	    value: function releaseScroller() {
+	      this.onEventEnd({
+	        gesture: (0, _logic.getEmptyVelocity)()
+	      });
+	    }
+	  }, {
+	    key: 'scrollerPosition',
+	    value: function scrollerPosition() {
+	      var scrollerId = arguments.length <= 0 || arguments[0] === undefined ? this.props.id : arguments[0];
+
+	      return (0, _StateHelpers.getScrollerPosition)(this.state, scrollerId);
+	    }
+	  }, {
+	    key: 'allPositions',
+	    value: function allPositions() {
+	      return (0, _StateHelpers.getAllScrollerPositions)(this.state);
+	    }
+	  }, {
+	    key: 'correctOutOfTheBox',
+	    value: function correctOutOfTheBox() {
+	      var _this2 = this;
+
+	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
+	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
+
+	      var state = this.state;
+	      var moved = false;
+	      (0, _StateHelpers.foreachScroller)(state, function (scrollerId) {
+	        var oldPosition = (0, _StateHelpers.getScrollerPosition)(state, scrollerId);
+	        var newPosition = (0, _PositionCorrectors.outOfTheBoxCorrection)(oldPosition, scrollerId, props, _this2.contentAutoSize);
+	        var newSpringValue = springValue;
+	        if (_this2.lastRenderedStyle && newPosition !== _this2.getLastRenderedStyle(scrollerId) && (0, _StateHelpers.getScrollerSpring)(state, scrollerId) === null) {
+	          newSpringValue = null;
+	        }
+	        if (newPosition !== oldPosition) {
+	          _this2.moveScroller(newPosition, scrollerId, newSpringValue);
+	          moved = true;
+	        }
+	      });
+	      return moved;
+	    }
+	  }, {
+	    key: 'correctPagination',
+	    value: function correctPagination() {
+	      var _this3 = this;
+
+	      var props = arguments.length <= 0 || arguments[0] === undefined ? this.props : arguments[0];
+	      var springValue = arguments.length <= 1 || arguments[1] === undefined ? Springs.Normal : arguments[1];
+
+	      var state = this.state;
+	      var moved = false;
+	      (0, _StateHelpers.foreachScroller)(state, function (scrollerId) {
+	        if ((0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.pagination) !== Pagination.None) {
+	          var oldPosition = (0, _StateHelpers.getScrollerPosition)(state, scrollerId);
+	          var ignorePagination = oldPosition === 0 && !props.loop;
+	          if (!ignorePagination) {
+	            var newPosition = (0, _PositionCorrectors.paginationCorrection)(oldPosition, scrollerId, props, 0, undefined, // prevSinglePage
+	            props.pagination === Pagination.First);
+	            if (newPosition !== oldPosition) {
+	              _this3.moveScroller(newPosition, scrollerId, springValue);
+	              moved = true;
+	            }
+	          }
+	        }
+	      });
+	      return moved;
+	    }
+	  }, {
+	    key: 'correctPosition',
+	    value: function correctPosition() {
+	      this.correctPagination();
+	      this.correctOutOfTheBox();
+	    }
+	  }, {
+	    key: 'lockPage',
+	    value: function lockPage() {
+	      var _getLock2 = this.getLock();
+
+	      var scroller = _getLock2.scroller;
+	      var _props = this.props;
+	      var id = _props.id;
+	      var pagination = _props.pagination;
+
+	      var paginationType = (0, _ArrayPropValue.getPropValueForScroller)(scroller, id, pagination);
+	      if (paginationType === Pagination.Single || paginationType === Pagination.Multiple) {
+	        this.setLockedPageLocked();
+	      }
+	    }
+	  }, {
+	    key: 'stopLockedScroller',
+	    value: function stopLockedScroller() {
+	      var _getLock3 = this.getLock();
+
+	      var scroller = _getLock3.scroller;
+
+	      var diff = this.getLastRenderedStyleForLocked() - (0, _StateHelpers.getScrollerPosition)(this.state, scroller);
+	      var minDiff = Springs.Normal.precision / this.props.scale;
+	      if (Math.abs(diff) > minDiff) {
+	        this.moveScroller(this.getLastRenderedStyleForLocked(), scroller, null);
+	        this.setLockedSwiped(true);
+	      }
+	    }
+	  }, {
+	    key: 'checkPageChanged',
+	    value: function checkPageChanged(scrollerId, position) {
+	      var oldPage = this.getLockedPage();
+	      var newPage = (0, _PositionCorrectors.pageNumberForPosition)(position, scrollerId, this.props);
+	      if (oldPage !== newPage) {
+	        this.callOnPageChanged(newPage);
+	      }
+	    }
+	  }, {
+	    key: 'isSwipeInRightDirection',
+	    value: function isSwipeInRightDirection(e) {
+	      var orientation = this.props.orientation;
+
+	      var direction = e.gesture.type.replace('swipe', '');
+	      return _OrientationHelpers.orientationDirection[orientation].indexOf(direction) >= 0;
+	    }
+	  }, {
+	    key: 'isOutOfTheBox',
+	    value: function isOutOfTheBox(position) {
+	      if (this.props.loop) {
+	        return false;
+	      }
+	      var outOfTheBoxCorrectionPos = (0, _PositionCorrectors.outOfTheBoxCorrection)(position, this.getLockedScroller(), this.props, this.contentAutoSize);
+	      return outOfTheBoxCorrectionPos !== position;
+	    }
+	  }, {
+	    key: 'updateContentSize',
+	    value: function updateContentSize() {
+	      var _props2 = this.props;
+	      var size = _props2.size;
+	      var page = _props2.page;
+	      var orientation = _props2.orientation;
+	      var pagination = _props2.pagination;
+
+	      if (size.content === undefined && this.contentDom !== undefined) {
+	        var sizeProp = _OrientationHelpers.orientationSize[orientation];
+	        var capitalSizeProp = sizeProp.charAt(0).toUpperCase() + sizeProp.slice(1);
+	        this.contentAutoSize = this.contentDom['client' + capitalSizeProp];
+	      }
+	      var contentSize = this.contentAutoSize || size.content;
+	      if (pagination === Pagination.First) {
+	        var minSize = size.container + page.size + page.margin;
+	        if (contentSize < minSize) {
+	          contentSize = minSize;
+	        }
+	        this.contentAutoSize = contentSize;
+	      }
+	    }
+	  }, {
+	    key: 'callOnScroll',
+	    value: function callOnScroll(scrollerPosition) {
+	      var onScroll = this.props.onScroll;
+
+	      if (onScroll) {
+	        onScroll(scrollerPosition);
+	      }
+	    }
+	  }, {
+	    key: 'callOnPageChanged',
+	    value: function callOnPageChanged(page) {
+	      var onPageChanged = this.props.onPageChanged;
+
+	      if (onPageChanged) {
+	        onPageChanged(page);
+	      }
+	    }
+	  }, {
+	    key: 'motionRest',
+	    value: function motionRest() {
+	      this.autoScrolling = false;
+	    }
+	  }, {
+	    key: 'renderChildren',
+	    value: function renderChildren(style) {
+	      if (typeof this.props.id === 'string') {
+	        var pos = style[this.props.id];
+	        if (this.props.loop) {
+	          pos = (0, _logic.correctLoopPosition)(pos, this.props.size.content, this.contentAutoSize);
+	        }
+	        this.callOnScroll(pos);
+	        if (typeof this.props.children === 'function') {
+	          return this.props.children(pos);
+	        }
+	        var _props3 = this.props;
+	        var orientation = _props3.orientation;
+	        var size = _props3.size;
+
+	        var containerStyle = (0, _styleApi.getContainerWithOrientationStyle)(orientation, size);
+	        var containerItemStyle = {
+	          transform: this.getTransformString(pos)
+	        };
+	        return _react2.default.createElement(
+	          'div',
+	          { style: containerStyle },
+	          _react2.default.createElement(
+	            'div',
+	            { style: containerItemStyle, ref: this.onSetContentDom },
+	            this.props.children
+	          )
+	        );
+	      }
+	      this.callOnScroll(style);
+	      return this.props.children(style);
+	    }
+	  }, {
+	    key: 'renderWrappedIfArray',
+	    value: function renderWrappedIfArray(children) {
+	      if (children instanceof Array) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          children
+	        );
+	      }
+	      return children;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this4 = this;
+
+	      var springStyle = (0, _StateHelpers.getSpringStyle)(this.state);
+	      return _react2.default.createElement(
+	        _reactMotion.Motion,
+	        { style: springStyle, onRest: this.motionRest },
+	        function (style) {
+	          _this4.setLastRenderedStyle(style);
+	          var children = _this4.renderChildren(style);
+	          return _react2.default.createElement(
+	            _reactGesture2.default,
+	            {
+	              onTouchStart: _this4.onEventBegin,
+	              onMouseDown: _this4.onEventBegin,
+	              onTouchEnd: _this4.onEventEnd,
+	              onMouseUp: _this4.onEventEnd,
+	              onSwipeLeft: _this4.onSwipe,
+	              onSwipeRight: _this4.onSwipe,
+	              onSwipeUp: _this4.onSwipe,
+	              onSwipeDown: _this4.onSwipe
+	            },
+	            _this4.renderWrappedIfArray(children)
+	          );
+	        }
+	      );
+	    }
+	  }]);
+
+	  return Scroller;
+	}(_react2.default.Component), (_applyDecoratedDescriptor(_class.prototype, 'onEventBegin', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventBegin'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onEventEnd', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onEventEnd'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSwipe', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSwipe'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'onSetContentDom', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'onSetContentDom'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'motionRest', [_autobindDecorator2.default], Object.getOwnPropertyDescriptor(_class.prototype, 'motionRest'), _class.prototype)), _class);
+
+
+	var valueOrArray = function valueOrArray(ReactType) {
+	  return _react2.default.PropTypes.oneOfType([ReactType, _react2.default.PropTypes.arrayOf(ReactType)]);
+	};
+	var enumType = function enumType(Enum) {
+	  return _react2.default.PropTypes.oneOf(Object.keys(Enum).map(function (key) {
+	    return Enum[key];
+	  }));
+	};
+
+	var propTypes = {
+	  id: valueOrArray(_react2.default.PropTypes.string).isRequired,
+	  orientation: enumType(Orientation),
+	  pagination: valueOrArray(enumType(Pagination)),
+	  center: valueOrArray(_react2.default.PropTypes.bool),
+	  loop: valueOrArray(_react2.default.PropTypes.bool),
+	  size: _react2.default.PropTypes.shape({
+	    container: valueOrArray(_react2.default.PropTypes.number).isRequired,
+	    content: valueOrArray(_react2.default.PropTypes.number)
+	  }).isRequired,
+	  page: _react2.default.PropTypes.shape({
+	    size: valueOrArray(_react2.default.PropTypes.number),
+	    margin: valueOrArray(_react2.default.PropTypes.number)
+	  }),
+	  multiple: _react2.default.PropTypes.shape({
+	    before: _react2.default.PropTypes.number,
+	    between: _react2.default.PropTypes.number,
+	    size: _react2.default.PropTypes.number
+	  }),
+	  scale: _react2.default.PropTypes.number,
+	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.func, _react2.default.PropTypes.node]),
+	  onScroll: _react2.default.PropTypes.func,
+	  onPageChanged: _react2.default.PropTypes.func
+	};
+
+	Scroller.propTypes = propTypes;
+	Scroller.defaultProps = defaultProps;
+
+	/*
+	const propsExample = {
+	  id: ['scr-a', 'scr-b'],
+	  orientation: Orientation.Horizontal, // single value only
+	  pagination: [Pagination.Multiple, Pagination.None],
+	  center: [true, false],
+	  size: {
+	    container: 1366,
+	    content: [900, 2000]
+	  },
+	  page: {
+	    size: 300,
+	    margin: 30
+	  },
+	  multiple: {
+	    before: 30,
+	    between: 200,
+	    size: 400
+	  }
+	};
+	*/
+
+/***/ },
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21140,7 +21346,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _autobindDecorator = __webpack_require__(170);
+	var _autobindDecorator = __webpack_require__(168);
 
 	var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
 
@@ -23331,25 +23537,25 @@
 	var Normal = exports.Normal = {
 	  stiffness: 250,
 	  damping: 30,
-	  precision: 0.1
+	  precision: 1
 	};
 
 	var Move = exports.Move = {
 	  stiffness: 170,
 	  damping: 26,
-	  precision: 0.1
+	  precision: 1
 	};
 
 	var Bounce = exports.Bounce = {
 	  stiffness: 120,
 	  damping: 14,
-	  precision: 0.1
+	  precision: 1
 	};
 
 	var Hard = exports.Hard = {
 	  stiffness: 390,
 	  damping: 30,
-	  precision: 0.1
+	  precision: 1
 	};
 
 /***/ },
@@ -23415,13 +23621,16 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var outOfTheBoxCorrection = exports.outOfTheBoxCorrection = function outOfTheBoxCorrection(position, scroller, _ref) {
+	var outOfTheBoxCorrection = exports.outOfTheBoxCorrection = function outOfTheBoxCorrection(position, scroller, _ref, contentAutoSize) {
 	  var id = _ref.id;
 	  var size = _ref.size;
 	  var center = _ref.center;
 
 	  var container = (0, _ArrayPropValue.getPropValueForScroller)(scroller, id, size.container);
 	  var content = (0, _ArrayPropValue.getPropValueForScroller)(scroller, id, size.content);
+	  if (content === undefined) {
+	    content = contentAutoSize;
+	  }
 	  var containerOrContent = container < content ? container : content;
 
 	  var leftEdge = 0;
@@ -23542,6 +23751,331 @@
 	    return prop;
 	  }
 	  return undefined;
+	};
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getSpringByPagination = getSpringByPagination;
+	exports.getAdjustedSpring = getAdjustedSpring;
+
+	var _Pagination = __webpack_require__(194);
+
+	var Pagination = _interopRequireWildcard(_Pagination);
+
+	var _Springs = __webpack_require__(195);
+
+	var Springs = _interopRequireWildcard(_Springs);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getSpringByPagination(pagination) {
+	  switch (pagination) {
+	    case Pagination.Single:
+	    case Pagination.First:
+	      return Springs.Move;
+	    case Pagination.Multiple:
+	      return Springs.Bounce;
+	    default:
+	      return Springs.Move;
+	  }
+	}
+
+	function getAdjustedSpring(oldPosition, newPosition, spring) {
+	  if (oldPosition !== newPosition) {
+	    return Springs.Bounce;
+	  }
+	  return spring;
+	}
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getContainerWithOrientationStyle = getContainerWithOrientationStyle;
+
+	var _style = __webpack_require__(202);
+
+	var _OrientationHelpers = __webpack_require__(197);
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function getContainerWithOrientationStyle(orientation, size) {
+	  return Object.assign({}, _style.CONTAINER_STYLE, _defineProperty({}, _OrientationHelpers.orientationSize[orientation], size.container + 'px'));
+	}
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var CONTAINER_STYLE = exports.CONTAINER_STYLE = {
+	  overflow: 'hidden',
+	  width: '100%',
+	  height: '100%'
+	};
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getVelocityProp = getVelocityProp;
+	exports.getDeltaProp = getDeltaProp;
+	exports.getTranslate3D = getTranslate3D;
+
+	var _OrientationHelpers = __webpack_require__(197);
+
+	function getVelocityProp(orientation) {
+	  return 'velocity' + _OrientationHelpers.orientationProp[orientation].toUpperCase();
+	}
+
+	function getDeltaProp(orientation) {
+	  return 'delta' + _OrientationHelpers.orientationProp[orientation].toUpperCase();
+	}
+
+	function getTranslate3D(translate) {
+	  return 'translate3d(' + translate.x + 'px, ' + translate.y + 'px, 0px)';
+	}
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getSpringStyleForScroller = getSpringStyleForScroller;
+	exports.getPositionAndSpring = getPositionAndSpring;
+	exports.getEmptyVelocity = getEmptyVelocity;
+	exports.correctLoopPosition = correctLoopPosition;
+	exports.setOrientationPos = setOrientationPos;
+	exports.getCoordinatesByOrientation = getCoordinatesByOrientation;
+
+	var _reactMotion = __webpack_require__(178);
+
+	var _OrientationHelpers = __webpack_require__(197);
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function getSpringStyleForScroller(scrollerState) {
+	  if (scrollerState.spring !== null) {
+	    return (0, _reactMotion.spring)(scrollerState.position, scrollerState.spring);
+	  }
+	  return scrollerState.position;
+	}
+
+	function getPositionAndSpring(newPosition, springValue) {
+	  return {
+	    position: newPosition,
+	    spring: springValue
+	  };
+	}
+
+	function getEmptyVelocity() {
+	  return {
+	    velocityX: 0,
+	    velocityY: 0
+	  };
+	}
+
+	function correctLoopPosition(position, contentSize, contentAutoSize) {
+	  var contentSize2 = contentSize === undefined ? contentAutoSize : contentSize;
+	  var pos = position % contentSize2;
+	  if (pos > 0) {
+	    pos -= contentSize2;
+	  }
+	  return pos;
+	}
+
+	function setOrientationPos(translate, orientation, position) {
+	  return Object.assign({}, translate, _defineProperty({}, _OrientationHelpers.orientationProp[orientation], position));
+	}
+
+	function getCoordinatesByOrientation(coordinates, orientation) {
+	  return coordinates[_OrientationHelpers.orientationProp[orientation]];
+	}
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getAllScrollerPositions = exports.getScrollerSpring = exports.getScrollerPosition = exports.getScroller = exports.moveScrollerNewPartialState = exports.scrollerExists = exports.getSpringStyle = exports.foreachScroller = exports.getInitialState = exports.getInitialScrollerState = exports.getInitialPosition = undefined;
+
+	var _ArrayPropValue = __webpack_require__(199);
+
+	var _Pagination = __webpack_require__(194);
+
+	var Pagination = _interopRequireWildcard(_Pagination);
+
+	var _logic = __webpack_require__(204);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var getInitialPosition = exports.getInitialPosition = function getInitialPosition(scrollerId, props) {
+	  var pagination = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.pagination);
+	  if (pagination === Pagination.First) {
+	    var pageSize = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.page.size);
+	    var pageMargin = (0, _ArrayPropValue.getPropValueForScroller)(scrollerId, props.id, props.page.margin);
+	    return -(pageSize + 2 * pageMargin);
+	  }
+	  return 0;
+	};
+
+	var getInitialScrollerState = exports.getInitialScrollerState = function getInitialScrollerState(scrollerId, props) {
+	  return {
+	    position: getInitialPosition(scrollerId, props),
+	    spring: null
+	  };
+	};
+
+	var getInitialState = exports.getInitialState = function getInitialState(props) {
+	  var scrollerIds = [];
+	  var scrollers = [];
+	  if (typeof props.id === 'string') {
+	    scrollerIds.push(props.id);
+	    scrollers.push(getInitialScrollerState(props.id, props));
+	  } else {
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	      for (var _iterator = props.id[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var id = _step.value;
+
+	        scrollerIds.push(id);
+	        scrollers.push(getInitialScrollerState(id, props));
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	  }
+	  return { scrollerIds: scrollerIds, scrollers: scrollers };
+	};
+
+	var foreachScroller = exports.foreachScroller = function foreachScroller(state, callback) {
+	  var scrollerIds = state.scrollerIds;
+	  var scrollers = state.scrollers;
+
+	  for (var i = 0; i < scrollerIds.length; ++i) {
+	    callback(scrollerIds[i], scrollers[i]);
+	  }
+	};
+
+	var getSpringStyle = exports.getSpringStyle = function getSpringStyle(state) {
+	  var springStyle = {};
+	  foreachScroller(state, function (scrollerId, scroller) {
+	    springStyle[scrollerId] = (0, _logic.getSpringStyleForScroller)(scroller);
+	  });
+	  return springStyle;
+	};
+
+	var scrollerExists = exports.scrollerExists = function scrollerExists(state, scrollerId) {
+	  return state.scrollerIds.indexOf(scrollerId) >= 0;
+	};
+
+	var moveScrollerNewPartialState = exports.moveScrollerNewPartialState = function moveScrollerNewPartialState(oldState, scrollerId, newPosition, springValue) {
+	  var scrollerIds = oldState.scrollerIds;
+	  var scrollers = oldState.scrollers;
+
+	  var newScrollers = [].concat(_toConsumableArray(scrollers));
+	  var index = scrollerIds.indexOf(scrollerId);
+	  newScrollers[index] = (0, _logic.getPositionAndSpring)(newPosition, springValue);
+	  return {
+	    scrollers: newScrollers
+	  };
+	};
+
+	var getScroller = exports.getScroller = function getScroller(state, scrollerId) {
+	  var scrollerIds = state.scrollerIds;
+	  var scrollers = state.scrollers;
+
+	  var index = scrollerIds.indexOf(scrollerId);
+	  return scrollers[index];
+	};
+
+	var getScrollerPosition = exports.getScrollerPosition = function getScrollerPosition(state, scrollerId) {
+	  return getScroller(state, scrollerId).position;
+	};
+
+	var getScrollerSpring = exports.getScrollerSpring = function getScrollerSpring(state, scrollerId) {
+	  return getScroller(state, scrollerId).spring;
+	};
+
+	var getAllScrollerPositions = exports.getAllScrollerPositions = function getAllScrollerPositions(state) {
+	  var positions = {};
+	  foreachScroller(state, function (scrollerId, scroller) {
+	    positions[scrollerId] = scroller.position;
+	  });
+	  return positions;
+	};
+
+/***/ },
+/* 206 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var scrollerLocks = {};
+
+	var setScrollerLock = exports.setScrollerLock = function setScrollerLock(orientation, scrollerId) {
+	  scrollerLocks[orientation] = scrollerId;
+	};
+
+	var getScrollerLock = exports.getScrollerLock = function getScrollerLock(orientation) {
+	  return scrollerLocks[orientation];
+	};
+
+	var emptyScrollerLock = exports.emptyScrollerLock = function emptyScrollerLock(orientation) {
+	  scrollerLocks[orientation] = undefined;
+	};
+
+	var isScrollerLocked = exports.isScrollerLocked = function isScrollerLocked(orientation) {
+	  return scrollerLocks[orientation] !== undefined;
 	};
 
 /***/ }
