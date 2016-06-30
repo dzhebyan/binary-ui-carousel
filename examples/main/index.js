@@ -71,6 +71,7 @@ class Example extends React.Component {
         <div id="ReactMgrH3">
           <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } 
             onPageChanged={ (page) => console.log(`ReactMgrH3: ${colors[page]}`) }
+            selectedIndex={2}
           >
             { colors.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>

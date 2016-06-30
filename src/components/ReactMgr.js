@@ -21,6 +21,7 @@ const propTypes = {
     containerWidth: React.PropTypes.number,
     containerHeight: React.PropTypes.number,
   }).isRequired,
+  selectedIndex: React.PropTypes.number,
   onPageChanged: React.PropTypes.func,
   children: React.PropTypes.arrayOf(
     React.PropTypes.node
@@ -39,6 +40,20 @@ export class ReactMgr extends React.Component {
         newPage += pageCount;
       }
       onPageChanged(newPage);
+    }
+  }
+
+  @autobind
+  onRef(scroller) {
+    const { id, selectedIndex } = this.props;
+    this.scroller = scroller;
+    if (selectedIndex !== undefined) {
+      scroller.moveScrollerToPage(
+        selectedIndex,
+        id,
+        undefined /* margin: auto */,
+        null /* animation: none */
+      );
     }
   }
 
@@ -96,7 +111,7 @@ export class ReactMgr extends React.Component {
   }
 
   render() {
-    const { size } = this.props;
+    const { id, size } = this.props;
     const children = [...this.props.children];
     if (children.length === 2) {
       children.push(children[0]);
@@ -124,7 +139,7 @@ export class ReactMgr extends React.Component {
     }
     return (
       <Scroller
-        id="carousel"
+        id={id}
         orientation={this.props.orientation}
         size={scrollerSize}
         pagination={Pagination.Single}
@@ -132,6 +147,7 @@ export class ReactMgr extends React.Component {
         loop={isLoop}
         center
         onPageChanged={this.onPageChanged}
+        ref={this.onRef}
       >
         {(scrollerPosition) => (
           <div style={carouselStyle} >
