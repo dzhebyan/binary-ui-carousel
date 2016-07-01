@@ -43,20 +43,6 @@ export class ReactMgr extends React.Component {
     }
   }
 
-  @autobind
-  onRef(scroller) {
-    const { id, selectedIndex } = this.props;
-    this.scroller = scroller;
-    if (selectedIndex !== undefined) {
-      scroller.moveScrollerToPage(
-        selectedIndex,
-        id,
-        undefined /* margin: auto */,
-        null /* animation: none */
-      );
-    }
-  }
-
   getItemPosition(scrollerPosition, item) {
     const { size } = this.props;
     const { page, margin } = size;
@@ -144,10 +130,12 @@ export class ReactMgr extends React.Component {
         size={scrollerSize}
         pagination={Pagination.Single}
         page={scrollerPage}
+        position={{
+          page: this.props.selectedIndex,
+        }}
         loop={isLoop}
         center
         onPageChanged={this.onPageChanged}
-        ref={this.onRef}
       >
         {(scrollerPosition) => (
           <div style={carouselStyle} >
