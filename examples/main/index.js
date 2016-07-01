@@ -30,11 +30,13 @@ class Example extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       test: 0,
+      mgr1: 0,
+      mgr2: 0,
+      mgr3: 2,
+      mgr4: 0,
     };
-
     this.onChangeState = this.onChangeState.bind(this);
   }
 
@@ -45,43 +47,59 @@ class Example extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <div onClick={this.onChangeState} >Change State</div>
         <div id="ReactMgrH1">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal }
-            onPageChanged={ (page) => console.log(`ReactMgrH1: ${colors1[page]}`) }
+          <ReactMgr
+            id="colors"
+            size={carouselSizeH}
+            orientation={Orientation.Horizontal}
+            onPageChanged={(page) => { this.setState({ mgr1: page }); }}
+            selectedIndex={this.state.mgr1}
           >
-            { colors1.map((color, index) => (
-              <div key={color} style={getStyle(color)}>{ index }</div>
-            )) }
+            {colors1.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{index}</div>
+            ))}
           </ReactMgr>
         </div>
         <br />
         <div id="ReactMgrH2">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } 
-            onPageChanged={ (page) => console.log(`ReactMgrH2: ${colors2[page]}`) }
+          <ReactMgr
+            id="colors"
+            size={carouselSizeH}
+            orientation={Orientation.Horizontal} 
+            onPageChanged={(page) => { this.setState({ mgr2: page }); }}
+            selectedIndex={this.state.mgr2}
           >
-            { colors2.map((color, index) => (
-              <div key={color} style={getStyle(color)}>{ index }</div>
-            )) }
+            {colors2.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{index}</div>
+            ))}
           </ReactMgr>
         </div>
         <br />
         <div id="ReactMgrH3">
-          <ReactMgr id="colors" size={ carouselSizeH } orientation={ Orientation.Horizontal } 
-            onPageChanged={ (page) => console.log(`ReactMgrH3: ${colors[page]}`) }
-            selectedIndex={2}
+          <ReactMgr
+            id="colors"
+            size={carouselSizeH}
+            orientation={Orientation.Horizontal} 
+            onPageChanged={(page) => { this.setState({ mgr3: page }); }}
+            selectedIndex={this.state.mgr3}
           >
-            { colors.map((color, index) => (
-              <div key={color} style={getStyle(color)}>{ index }</div>
-            )) }
+            {colors.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{index}</div>
+            ))}
           </ReactMgr>
         </div>
         <br />
         <div id="ReactMgrV">
-          <ReactMgr id="colors" size={ carouselSizeV } orientation={ Orientation.Vertiacal } 
-            onPageChanged={ (page) => console.log(`ReactMgrV: ${colors[page]}`) }
+          <ReactMgr
+            id="colors"
+            size={carouselSizeV}
+            orientation={Orientation.Vertiacal}
+            onPageChanged={(page) => { this.setState({ mgr4: page }); }}
+            selectedIndex={this.state.mgr4}
           >
             { colors.map((color, index) => (
               <div key={color} style={getStyle(color)}>{ index }</div>

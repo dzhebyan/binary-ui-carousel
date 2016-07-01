@@ -21,7 +21,7 @@ const propTypes = {
     containerWidth: React.PropTypes.number,
     containerHeight: React.PropTypes.number,
   }).isRequired,
-  selectedIndex: React.PropTypes.number,
+  selectedIndex: React.PropTypes.number.isRequired,
   onPageChanged: React.PropTypes.func,
   children: React.PropTypes.arrayOf(
     React.PropTypes.node
