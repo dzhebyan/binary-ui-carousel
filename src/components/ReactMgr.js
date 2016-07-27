@@ -99,10 +99,6 @@ export class ReactMgr extends React.Component {
   render() {
     const { id, size } = this.props;
     const children = [...this.props.children];
-    if (children.length === 2) {
-      children.push(children[0]);
-      children.push(children[1]);
-    }
     const containerScrollableSize = this.getContainerScrollableSize();
     const scrollerSize = {
       container: containerScrollableSize,
@@ -122,6 +118,10 @@ export class ReactMgr extends React.Component {
     const isLoop = children.length > 1;
     if (!isLoop) {
       scrollerSize.content += size.margin;
+    }
+    if (children.length === 2) {
+      children.push(children[0]);
+      children.push(children[1]);
     }
     return (
       <Scroller

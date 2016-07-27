@@ -20705,10 +20705,6 @@
 	      var size = _props4.size;
 
 	      var children = [].concat(_toConsumableArray(this.props.children));
-	      if (children.length === 2) {
-	        children.push(children[0]);
-	        children.push(children[1]);
-	      }
 	      var containerScrollableSize = this.getContainerScrollableSize();
 	      var scrollerSize = {
 	        container: containerScrollableSize,
@@ -20728,6 +20724,10 @@
 	      var isLoop = children.length > 1;
 	      if (!isLoop) {
 	        scrollerSize.content += size.margin;
+	      }
+	      if (children.length === 2) {
+	        children.push(children[0]);
+	        children.push(children[1]);
 	      }
 	      return _react2.default.createElement(
 	        _reactScrolling.Scroller,
