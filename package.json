@@ -1,6 +1,6 @@
 {
   "name": "react-mgr",
-  "version": "0.0.1-rc15",
+  "version": "0.0.1-rc16",
   "description": "React carousel component.",
   "keywords": [
     "react",
@@ -28,9 +28,11 @@
   ],
   "main": "lib/index.js",
   "dependencies": {
-    "autobind-decorator": "^1.3.3",
-    "react": "^15.1.0",
-    "react-scrolling": "^0.0.1-rc.24"
+    "autobind-decorator": "^1.3.3"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0",
+    "react-scrolling": "^0.0.1-rc.28"
   },
   "devDependencies": {
     "babel": "^6.3.26",
