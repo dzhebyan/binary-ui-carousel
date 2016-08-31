@@ -14,6 +14,17 @@ Using [npm](https://www.npmjs.com/):
 npm install --save react-mgr
 ```
 
+### API
+
+prop            | type                         | default value
+----------------|------------------------------|--------------
+`children`      | `arrayOf[node]`              |
+`id`            | `string`                     |
+`orientation`   | `string`                     |
+`selectedIndex` | `number`                     |
+`size`          | `object`                     |
+`onPageChanged` | `func`                       |
+
 ### License
 
 MIT
