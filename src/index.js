@@ -1,7 +1,7 @@
-import { ReactMgr } from './components/ReactMgr';
 import { Orientation } from 'react-scrolling';
+import ReactMgr from './component';
 
 export {
-  ReactMgr,
   Orientation,
+  ReactMgr,
 };

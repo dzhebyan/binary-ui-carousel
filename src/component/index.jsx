@@ -1,5 +1,4 @@
 import React from 'react';
-import autobind from 'autobind-decorator';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
 const defaultProps = {
@@ -28,9 +27,13 @@ const propTypes = {
   ),
 };
 
-export class ReactMgr extends React.Component {
+export default class ReactMgr extends React.Component {
 
-  @autobind
+  constructor(props) {
+    super(props);
+    this.onPageChanged = this.onPageChanged.bind(this);
+  }
+
   onPageChanged(page) {
     const { onPageChanged, children } = this.props;
     if (onPageChanged) {
