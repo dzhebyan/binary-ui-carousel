@@ -7,6 +7,8 @@
 
 React carousel component.
 
+![](https://github.com/opensource-cards/react-colorizer/blob/master/demo.gif)
+
 ### Installation
 
 Using [npm](https://www.npmjs.com/):

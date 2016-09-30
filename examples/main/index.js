@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ReactMgr, Orientation } from 'react-mgr';
 
-const colors1 = ['red', 'green'];
-const colors2 = ['red'];
-const colors = ['red', 'green', 'blue', 'yellow'];
+const colors1 = ['#AA3939', '#AA6C39'];
+const colors2 = ['#AA3939'];
+const colors = ['#AA3939', '#AA6C39', '#226666', '#2D882D'];
 const carouselSizeH = {
   page: 240,
   margin: 10,
@@ -65,6 +65,20 @@ class Example extends React.Component {
           </ReactMgr>
         </div>
         <br />
+        <div id="ReactMgrV">
+          <ReactMgr
+            id="colors"
+            size={carouselSizeV}
+            orientation={Orientation.Vertiacal}
+            onPageChanged={(page) => { this.setState({ mgr4: page }); }}
+            selectedIndex={this.state.mgr4}
+          >
+            { colors.map((color, index) => (
+              <div key={color} style={getStyle(color)}>{ index }</div>
+            )) }
+          </ReactMgr>
+        </div>
+        <br />
         <div id="ReactMgrH2">
           <ReactMgr
             id="colors"
@@ -90,20 +104,6 @@ class Example extends React.Component {
             {colors.map((color, index) => (
               <div key={color} style={getStyle(color)}>{index}</div>
             ))}
-          </ReactMgr>
-        </div>
-        <br />
-        <div id="ReactMgrV">
-          <ReactMgr
-            id="colors"
-            size={carouselSizeV}
-            orientation={Orientation.Vertiacal}
-            onPageChanged={(page) => { this.setState({ mgr4: page }); }}
-            selectedIndex={this.state.mgr4}
-          >
-            { colors.map((color, index) => (
-              <div key={color} style={getStyle(color)}>{ index }</div>
-            )) }
           </ReactMgr>
         </div>
       </div>
