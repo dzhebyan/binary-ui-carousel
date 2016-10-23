@@ -1,6 +1,5 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { ReactMgr, Orientation } from 'react-mgr';
+import React from 'react';
+import ReactMgr from 'react-mgr';
 
 const colors1 = ['#AA3939', '#AA6C39'];
 const colors2 = ['#AA3939'];
@@ -26,7 +25,7 @@ function getStyle(color) {
   };
 }
 
-class Example extends React.Component {
+export default class Example extends React.Component {
 
   constructor(props) {
     super(props);
@@ -55,7 +54,6 @@ class Example extends React.Component {
           <ReactMgr
             id="colors"
             size={carouselSizeH}
-            orientation={Orientation.Horizontal}
             onPageChanged={(page) => { this.setState({ mgr1: page }); }}
             selectedIndex={this.state.mgr1}
           >
@@ -69,7 +67,7 @@ class Example extends React.Component {
           <ReactMgr
             id="colors"
             size={carouselSizeV}
-            orientation={Orientation.Vertiacal}
+            isVertical
             onPageChanged={(page) => { this.setState({ mgr4: page }); }}
             selectedIndex={this.state.mgr4}
           >
@@ -83,7 +81,6 @@ class Example extends React.Component {
           <ReactMgr
             id="colors"
             size={carouselSizeH}
-            orientation={Orientation.Horizontal} 
             onPageChanged={(page) => { this.setState({ mgr2: page }); }}
             selectedIndex={this.state.mgr2}
           >
@@ -97,7 +94,6 @@ class Example extends React.Component {
           <ReactMgr
             id="colors"
             size={carouselSizeH}
-            orientation={Orientation.Horizontal} 
             onPageChanged={(page) => { this.setState({ mgr3: page }); }}
             selectedIndex={this.state.mgr3}
           >
@@ -110,8 +106,3 @@ class Example extends React.Component {
     );
   }
 }
-
-ReactDOM.render(
-  <Example />,
-  document.getElementById('ReactMgr')
-);

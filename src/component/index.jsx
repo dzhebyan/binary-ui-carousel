@@ -1,10 +1,6 @@
 import React from 'react';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
-const defaultProps = {
-  orientation: Orientation.Horizontal,
-};
-
 const enumType = (Enum) => (
   React.PropTypes.oneOf(
     Object.keys(Enum).map(key => Enum[key])
@@ -13,7 +9,7 @@ const enumType = (Enum) => (
 
 const propTypes = {
   id: React.PropTypes.string.isRequired,
-  orientation: enumType(Orientation),
+  isVertical: React.PropTypes.bool,
   size: React.PropTypes.shape({
     page: React.PropTypes.number,
     margin: React.PropTypes.number,
@@ -25,6 +21,10 @@ const propTypes = {
   children: React.PropTypes.arrayOf(
     React.PropTypes.node
   ),
+};
+
+const defaultProps = {
+  isVertical: false,
 };
 
 export default class ReactMgr extends React.Component {
@@ -62,8 +62,8 @@ export default class ReactMgr extends React.Component {
   }
 
   getCoordinatesByOrientation(position) {
-    const { orientation } = this.props;
-    return (orientation === Orientation.Horizontal)
+    const { isVertical } = this.props;
+    return (isVertical === false)
       ? {
         x: position,
         y: 0,
@@ -74,15 +74,15 @@ export default class ReactMgr extends React.Component {
   }
 
   getContainerScrollableSize() {
-    const { size, orientation } = this.props;
-    return (orientation === Orientation.Horizontal)
+    const { size, isVertical } = this.props;
+    return (isVertical === false)
       ? size.containerWidth
       : size.containerHeight;
   }
 
   getPageSize() {
-    const { size, orientation } = this.props;
-    return (orientation === Orientation.Horizontal)
+    const { size, isVertical } = this.props;
+    return (isVertical === false)
       ? {
         width: `${size.page}px`,
         height: '100%',
@@ -129,7 +129,7 @@ export default class ReactMgr extends React.Component {
     return (
       <Scroller
         id={id}
-        orientation={this.props.orientation}
+        orientation={this.props.isVertical ? Orientation.Vertiacal : Orientation.Horizontal}
         size={scrollerSize}
         pagination={Pagination.Single}
         page={scrollerPage}
@@ -140,7 +140,7 @@ export default class ReactMgr extends React.Component {
         center
         onPageChanged={this.onPageChanged}
       >
-        {(scrollerPosition) => (
+        {scrollerPosition => (
           <div style={carouselStyle} >
             {children.map((child, i) => {
               const position = this.getCarouselItemPosition(

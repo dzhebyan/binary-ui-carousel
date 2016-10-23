@@ -23,7 +23,7 @@ prop            | type                         | default value
 ----------------|------------------------------|--------------
 `children`      | `arrayOf[node]`              |
 `id`            | `string`                     |
-`orientation`   | `string`                     |
+`isVertical`    | `bool`                       | `false`
 `selectedIndex` | `number`                     |
 `size`          | `object`                     |
 `onPageChanged` | `func`                       |
