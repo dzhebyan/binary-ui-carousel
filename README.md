@@ -5,7 +5,7 @@
 [![devDependency Status](https://david-dm.org/opensource-cards/react-mgr/dev-status.svg)](https://david-dm.org/opensource-cards/react-mgr#info=devDependencies)
 [![peerDependency Status](https://david-dm.org/opensource-cards/react-mgr/peer-status.svg)](https://david-dm.org/opensource-cards/react-mgr#info=peerDependencies)
 
-A carousel component for React.
+A carousel component for React and React Native.
 
 ![](https://github.com/opensource-cards/react-mgr/blob/master/demo.gif)
 
