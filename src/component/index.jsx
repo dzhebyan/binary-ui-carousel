@@ -1,13 +1,10 @@
 import React from 'react';
 import { Scroller, Orientation, Pagination } from 'react-scrolling';
 
-const enumType = (Enum) => (
-  React.PropTypes.oneOf(
-    Object.keys(Enum).map(key => Enum[key])
-  )
-);
-
 const propTypes = {
+  children: React.PropTypes.arrayOf(
+    React.PropTypes.node
+  ),
   id: React.PropTypes.string.isRequired,
   isVertical: React.PropTypes.bool,
   size: React.PropTypes.shape({
@@ -18,9 +15,6 @@ const propTypes = {
   }).isRequired,
   selectedIndex: React.PropTypes.number.isRequired,
   onPageChanged: React.PropTypes.func,
-  children: React.PropTypes.arrayOf(
-    React.PropTypes.node
-  ),
 };
 
 const defaultProps = {
@@ -31,6 +25,9 @@ export default class ReactMgr extends React.Component {
 
   constructor(props) {
     super(props);
+    if (props.children.length < 1) {
+      throw new Error('Should be more than one children');
+    }
     this.onPageChanged = this.onPageChanged.bind(this);
   }
 
@@ -100,12 +97,11 @@ export default class ReactMgr extends React.Component {
   }
 
   render() {
-    const { id, size } = this.props;
-    const children = [...this.props.children];
-    const containerScrollableSize = this.getContainerScrollableSize();
+    const { children, id, size } = this.props;
+    const newChildren = [...children];
     const scrollerSize = {
-      container: containerScrollableSize,
-      content: children.length * (size.page + size.margin),
+      container: this.getContainerScrollableSize(),
+      content: newChildren.length * (size.page + size.margin),
     };
     const scrollerPage = {
       size: size.page,
@@ -118,13 +114,13 @@ export default class ReactMgr extends React.Component {
       overflow: 'hidden',
     };
     const pageSize = this.getPageSize();
-    const isLoop = children.length > 1;
+    const isLoop = newChildren.length > 1;
     if (!isLoop) {
       scrollerSize.content += size.margin;
     }
-    if (children.length === 2) {
-      children.push(children[0]);
-      children.push(children[1]);
+    if (newChildren.length === 2) {
+      newChildren.push(newChildren[0]);
+      newChildren.push(newChildren[1]);
     }
     return (
       <Scroller
@@ -142,11 +138,11 @@ export default class ReactMgr extends React.Component {
       >
         {scrollerPosition => (
           <div style={carouselStyle} >
-            {children.map((child, i) => {
+            {newChildren.map((child, i) => {
               const position = this.getCarouselItemPosition(
                 scrollerPosition,
                 i,
-                children.length
+                newChildren.length
               );
               if (!this.isVisible(position)) {
                 return undefined;

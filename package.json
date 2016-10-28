@@ -13,6 +13,9 @@
     "email": "rk@try.cards"
   },
   "scripts": {
+    "rn-watch": "babel ./src --out-dir=./example_rn/lib --watch",
+    "rn-storybook": "cd example_rn && npm run storybook",
+    "rn-run-ios": "cd example_rn && react-native run-ios",
     "clean": "rimraf lib",
     "lint": "eslint src",
     "build": "npm run lint && npm run clean && babel src --out-dir lib",
