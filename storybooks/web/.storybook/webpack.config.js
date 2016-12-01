@@ -4,7 +4,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      'react-mgr': path.join(__dirname, '..', 'src'),
+      'react-mgr': path.join(__dirname, '..', '..', '..', 'src'),
     },
   },
   module: {

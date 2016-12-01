@@ -1,6 +1,6 @@
 {
   "name": "react-mgr",
-  "version": "0.0.1-rc20",
+  "version": "0.0.1-rc21",
   "description": "React carousel component.",
   "keywords": [
     "react",
@@ -13,14 +13,14 @@
     "email": "rk@try.cards"
   },
   "scripts": {
-    "rn-watch": "babel ./src --out-dir=./example_rn/lib --watch",
-    "rn-storybook": "cd example_rn && npm run storybook",
-    "rn-run-ios": "cd example_rn && react-native run-ios",
+    "storybook-web-build": "cd ./storybooks/web && npm run build-storybook",
+    "storybook-web": "cd ./storybooks/web && npm run storybook",
+    "storybook-native-watch": "babel ./src --out-dir=./storybooks/native/lib --watch",
+    "storybook-native": "cd ./storybooks/native && npm run storybook",
+    "storybook-ios": "cd ./storybooks/native && react-native run-ios",
     "clean": "rimraf lib",
     "lint": "eslint src",
-    "build": "npm run lint && npm run clean && babel src --out-dir lib",
-    "build-storybook": "build-storybook -o docs",
-    "storybook": "start-storybook -p 6006"
+    "build": "npm run lint && npm run clean && babel src --out-dir lib"
   },
   "license": "MIT",
   "repository": {
@@ -32,13 +32,11 @@
   ],
   "main": "lib/index.js",
   "dependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-scrolling": "^0.0.1-rc.31"
+    "react": "~15.3.2",
+    "react-scrolling": "^0.0.1-rc.32"
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@kadira/storybook": "^2.21.0",
     "babel": "^6.3.26",
     "babel-cli": "^6.16.0",
     "babel-core": "^6.16.0",
@@ -52,6 +50,8 @@
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
+    "react": "~15.3.2",
+    "react-dom": "~15.3.2",
     "rimraf": "^2.5.4"
   }
 }
