@@ -17,7 +17,8 @@
     "storybook-web": "cd ./storybooks/web && npm run storybook",
     "storybook-native-watch": "babel ./src --out-dir=./storybooks/native/lib --watch",
     "storybook-native": "cd ./storybooks/native && npm run storybook",
-    "storybook-ios": "cd ./storybooks/native && react-native run-ios",
+    "storybook-emulator-ios": "cd ./storybooks/native && react-native run-ios",
+    "storybook-ios": "npm run storybook-native-watch & npm run storybook-native & npm run storybook-emulator-ios",
     "clean": "rimraf lib",
     "lint": "eslint src",
     "build": "npm run lint && npm run clean && babel src --out-dir lib"
@@ -32,10 +33,11 @@
   ],
   "main": "lib/index.js",
   "dependencies": {
-    "react": "~15.3.2",
     "react-scrolling": "^0.0.1-rc.32"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "~15.3.2"
+  },
   "devDependencies": {
     "babel": "^6.3.26",
     "babel-cli": "^6.16.0",
