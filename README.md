@@ -17,16 +17,25 @@ Using [npm](https://www.npmjs.com/):
 npm install --save react-mgr
 ```
 
+Using [Yarn](https://yarnpkg.com/):
+
+```
+yarn add react-mgr
+```
+
 ### API
 
-prop            | type                         | default value
-----------------|------------------------------|--------------
-`children`      | `arrayOf[node]`              |
-`id`            | `string`                     |
-`isVertical`    | `bool`                       | `false`
-`selectedIndex` | `number`                     |
-`size`          | `object`                     |
-`onPageChanged` | `func`                       |
+prop                | type                       | default value
+--------------------|----------------------------|--------------
+`children`          | `arrayOf[node]`            |
+`containerHeight`   | `number`                   |
+`containerWidth`    | `number`                   |
+`margin`            | `number`                   |
+`pageWidth`         | `number`                   |
+`renderButtonLeft`  | `func`                     |
+`renderButtonRight` | `func`                     |
+`selectedIndex`     | `number`                   |
+`onChangeIndex`     | `func`                     |
 
 ### License
 
