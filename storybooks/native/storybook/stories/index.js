@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@kadira/react-native-storybook';
-import Example from './Example';
+import BinaryUICarousel from './components/BinaryUICarousel';
 
-storiesOf('components', module)
+storiesOf('binary-ui-carousel section', module)
   .add('example', () => (
-    <Example />
+    <BinaryUICarousel />
   ));

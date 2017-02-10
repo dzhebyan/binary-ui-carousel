@@ -2,7 +2,7 @@ import { ActionIcon } from 'binary-ui-components';
 import { CardsIconArrowLeft, CardsIconArrowRight } from 'binary-ui-icons';
 import React from 'react';
 import { Dimensions, Text, View } from 'react-native';
-import ReactMgr from '../../lib';
+import ReactMgr from 'binary-ui-carousel';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 const CAROUSEL_SIZE_MARGIN = 10;

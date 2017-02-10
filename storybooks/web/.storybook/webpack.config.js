@@ -4,7 +4,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      'react-mgr': path.join(__dirname, '..', '..', '..', 'src'),
+      'binary-ui-carousel': path.join(__dirname, '..', '..', '..', 'src'),
     },
   },
   module: {
