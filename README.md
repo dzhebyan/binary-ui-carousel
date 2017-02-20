@@ -1,5 +1,6 @@
 # binary-ui-carousel
 
+[![Build Status](https://travis-ci.org/opensource-cards/binary-ui-carousel.svg?branch=master)](https://travis-ci.org/opensource-cards/binary-ui-carousel)
 [![npm package](https://badge.fury.io/js/binary-ui-carousel.svg)](https://www.npmjs.org/package/binary-ui-carousel)
 [![Dependency Status](https://david-dm.org/opensource-cards/binary-ui-carousel.svg)](https://david-dm.org/opensource-cards/binary-ui-carousel)
 [![devDependency Status](https://david-dm.org/opensource-cards/binary-ui-carousel/dev-status.svg)](https://david-dm.org/opensource-cards/binary-ui-carousel#info=devDependencies)
