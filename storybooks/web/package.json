@@ -6,7 +6,10 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ../../docs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "binary-ui-components": "^0.1.0-rc.4",
+    "binary-ui-icons": "^0.1.0-rc.4"
+  },
   "devDependencies": {
     "@kadira/storybook": "^2.21.0"
   }
