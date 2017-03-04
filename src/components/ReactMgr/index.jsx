@@ -11,7 +11,7 @@ import mod from '../../utils/mod';
 
 const propTypes = {
   children: React.PropTypes.arrayOf(
-    React.PropTypes.node
+    React.PropTypes.node,
   ).isRequired,
   containerHeight: React.PropTypes.number.isRequired,
   containerWidth: React.PropTypes.number.isRequired,
@@ -75,10 +75,10 @@ export default class ReactMgr extends React.Component {
               height: containerHeight,
               width: buttonWidth,
             }}
+            onClick={this.onBack}
           >
             {renderButtonLeft({
               style: { marginTop: buttonMarginTop },
-              onClick: this.onBack,
             })}
           </ReactMgrButtonContainer>
           <ReactMgrListContainer
@@ -111,10 +111,10 @@ export default class ReactMgr extends React.Component {
               height: containerHeight,
               width: buttonWidth,
             }}
+            onClick={this.onNext}
           >
             {renderButtonRight({
               style: { marginTop: buttonMarginTop },
-              onClick: this.onNext,
             })}
           </ReactMgrButtonContainer>
         </ReactMgrNavigatableContainer>
